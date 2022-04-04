@@ -1,11 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Terminal {
     public static void main(String[] args)  {
 
         title();
+
+        POSProxy prox = new POSProxy();
+
+        while(true){
+            Scanner scanner = new Scanner(System.in);
+
+            //gather user input
+            int id = gatherID(scanner);
+            if(id == -1){
+                continue;
+            }
+            //tight coupled
+            String hash = hashPass(scanner, id);
+        }
         /**
          * TODO - Rory - Initiate login sequence
          * take user input, crosscheck against "database"
@@ -30,6 +45,8 @@ public class Terminal {
          * TODO - Rory - teach that robot how to play the piano if you have time.
          */
     }
+
+    //by Mason
     public static void title() {
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::..:....:\n" +
                 ":::::::::::.:::::::..:.....::::::::::::::::::::::::::::~JJ???~:\n" +
@@ -73,7 +90,25 @@ public class Terminal {
                 "::::::::::::::::::^^^^^~~~!!!77??JJY5PGGGGGGGGGGGGGGBBBBGGGPP55YYYJJJJ??77!!\n" +
                 ":::::::::::::::::::::^^^^^~~~!!!777???JJYY555PPPPGGGPPPP555YYYJJJ????77!!\n" +
                 ":::::::::::::::::::::::::::^^^^^^~~~~~!!!!!77777??????????77777!!!\n" +
-                ".::::::::::::::::::::::::::::::::::::^^^^^^^^^~~~~~~~~~");
+                ".::::::::::::::::::::::::::::::::::::^^^^^^^^^~~~~~~~~~\n");
+    }
+
+    //by Mason
+    public static int gatherID(Scanner scanner){
+        System.out.print("User ID: ");
+        try {
+            return scanner.nextInt();
+        }catch (InputMismatchException err){
+            System.out.println("User ID is a number. Try again.");
+            return -1;
+        }
+    }
+
+    public static String hashPass(Scanner scanner, int id){
+        System.out.printf("Enter Password for User %d: ", id);
+        //do not store password in any variable!
+        //TODO - Rory - Hash in SHA-256 or AES.
+        return "a";
     }
 }
 
