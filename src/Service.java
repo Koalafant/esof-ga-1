@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+
+//By Mason
 public abstract class Service {
     User currentUser;
     float currentPrice;
@@ -17,7 +20,14 @@ public abstract class Service {
     }return false;
     }
 
-    void display(){
-
+    void display(ArrayList<String> perm){
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for (String s : perm) {
+            builder.append(i + ": ");
+            builder.append(s);
+            builder.append("\n");
+        }
+        System.out.println(builder);
     }
 }

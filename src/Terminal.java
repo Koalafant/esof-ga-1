@@ -10,6 +10,19 @@ public class Terminal {
 
         POSProxy prox = new POSProxy();
 
+        /*
+        TEST - DON'T USE
+         */
+        User testUser = new Cashier(1, "toor", "Herbert Vonschmoof");
+        User lameTestUser = new Cashier(2, "badPassword", "New Tuna on Ice");
+        //addPerm is the perm needed to add permissions;
+        testUser.getPerm().add("addPerm");
+        testUser.addPermissions(lameTestUser, "makeItems");
+        prox.login(lameTestUser);
+        prox.display(lameTestUser.permissions);
+        /*
+        END TEST
+         */
 
        while(true){
             Scanner scanner = new Scanner(System.in);
@@ -26,8 +39,8 @@ public class Terminal {
            //TODO - must add file to keep track of users.
            //TODO - "user" must be built from this todo file.
             boolean validated = authUser(id, hash);
-            if(validated)
-                prox.login(user);
+            if(validated){
+                //prox.login(user);
             }
         }
         /**
