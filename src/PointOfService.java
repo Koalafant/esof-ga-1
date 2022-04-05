@@ -6,6 +6,7 @@ public class PointOfService extends Service {
 
     }
 
+    //by Mason
     protected static PointOfService getInstance(){
         if(pos == null){
             pos = new PointOfService();
@@ -15,6 +16,6 @@ public class PointOfService extends Service {
 
     @Override
     void login(User user) {
-
+        System.out.println("success!");
     }
 }

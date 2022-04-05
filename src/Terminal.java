@@ -10,7 +10,18 @@ public class Terminal {
 
         POSProxy prox = new POSProxy();
 
-        while(true){
+        /**
+         * Testing - don't use for prod
+         */
+
+        User rootUser = new rootUser();
+        prox.login(rootUser);
+
+        /**
+         * End test
+         */
+
+       while(true){
             Scanner scanner = new Scanner(System.in);
 
             //gather user input
