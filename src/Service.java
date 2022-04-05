@@ -7,12 +7,15 @@ public abstract class Service {
     abstract void login(User user);
 
     void logout(User user){
-
+        currentUser.loggedIn = false;
+        currentUser = null;
     }
 
     boolean isLoggedIn(){
-
-    return false;}
+    if(currentUser != null){
+        return true;
+    }return false;
+    }
 
     void display(){
 

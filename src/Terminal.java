@@ -10,16 +10,6 @@ public class Terminal {
 
         POSProxy prox = new POSProxy();
 
-        /**
-         * Testing - don't use for prod
-         */
-
-        User rootUser = new rootUser();
-        prox.login(rootUser);
-
-        /**
-         * End test
-         */
 
        while(true){
             Scanner scanner = new Scanner(System.in);
@@ -29,8 +19,16 @@ public class Terminal {
             if(id == -1){
                 continue;
             }
-            //tight coupled
+            //gather and hash password
             String hash = hashPass(scanner, id);
+
+            //if hash is correct, log user in
+           //TODO - must add file to keep track of users.
+           //TODO - "user" must be built from this todo file.
+            boolean validated = authUser(id, hash);
+            if(validated)
+                prox.login(user);
+            }
         }
         /**
          * TODO - Rory - Initiate login sequence
@@ -121,5 +119,9 @@ public class Terminal {
         //TODO - Rory - Hash in SHA-256 or AES.
         return "a";
     }
+
+    public static boolean authUser(int id, String hash){
+
+    return false;}
 }
 

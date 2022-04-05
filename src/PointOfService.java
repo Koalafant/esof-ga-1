@@ -1,7 +1,6 @@
 public class PointOfService extends Service {
 
     private static PointOfService pos;
-
     private PointOfService(){
 
     }
@@ -16,6 +15,7 @@ public class PointOfService extends Service {
 
     @Override
     void login(User user) {
-        System.out.println("success!");
+        user.loggedIn = true;
+        currentUser = user;
     }
 }
