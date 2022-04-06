@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Terminal {
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws FileNotFoundException  {
 
         title();
 
@@ -23,9 +23,15 @@ public class Terminal {
         /*
         END TEST
          */
+        
+        //Database testing
+        Scanner scanner = new Scanner(System.in);
+        DBtesting(scanner);
+        
 
        while(true){
-            Scanner scanner = new Scanner(System.in);
+    	   //Scanner scanner = new Scanner(System.in);
+            
 
             //gather user input
             int id = gatherID(scanner);
@@ -136,5 +142,89 @@ public class Terminal {
     public static boolean authUser(int id, String hash){
 
     return false;}
+    
+    
+    //Messy. Demonstrates basic database functionality. Not much error checking.
+    public static void DBtesting(Scanner scanner) throws FileNotFoundException {
+		Database DB = new Database("../database.csv");
+		DB.print();
+		System.out.println();
+        
+        //Login
+        System.out.print("Enter user id to log in: ");
+        int userID = scanner.nextInt();
+        scanner.nextLine(); //dump \n
+        if(DB.findUser(userID)) {
+        	System.out.print("\nEnter password: ");
+        	String pass = scanner.nextLine();
+        	if(DB.login(userID, pass) == 1) {
+        		System.out.println("\nWelcome, " + DB.getName(userID) + "! Successfully logged in.");
+        	} else if(DB.login(userID, pass) == 0){
+        		System.out.println(DB.getName(userID) + ", you are already logged in!");
+        	} else {
+        		System.out.println("Incorrect password.");
+        	}
+        } else {
+        	System.out.println("Invalid user ID.");
+        }
+        DB.update();
+        System.out.println();
+        DB.print();
+        
+        //Logout
+        System.out.print("Enter user id to log out: ");
+        userID = scanner.nextInt();
+        scanner.nextLine(); //dump \n
+        if(DB.findUser(userID)) {
+        	System.out.print("\nEnter password: ");
+        	String pass = scanner.nextLine();
+        	if(DB.logout(userID, pass) == 1) {
+        		System.out.println(DB.getName(userID) + ", you have sccessfully logged out.");
+        	} else if(DB.logout(userID, pass) == 0){
+        		System.out.println(DB.getName(userID) + ", you are already logged out!");
+        	} else {
+        		System.out.println("Incorrect password.");
+        	}
+        } else {
+        	System.out.println("Invalid user ID.");
+        }
+        
+        DB.update();
+        System.out.println();
+        DB.print();
+        
+        
+        //Delete user
+        System.out.print("Enter user id to delete: "); //11
+        userID = scanner.nextInt();
+        scanner.nextLine(); //dump \n
+        if(DB.deleteUser(userID)) {
+        	System.out.println("User successfully deleted.");
+        } else {
+        	System.out.println("No such user to delete.");
+        }
+        
+        DB.update();
+        System.out.println();
+        DB.print();
+        
+        
+        //Add user
+        System.out.println("\nAdding a user...");
+        String[] newUserInfo = {"11", "Sam2", "aPASS", "cash", "false"};
+        if(DB.addUser(newUserInfo)) {
+        	System.out.println("New user successfully added.");
+        } else {
+        	System.out.println("No space to add user. Please fire someone then try again.");
+        }
+        
+        DB.update();
+        System.out.println();
+        DB.print();
+        
+        System.out.println("-------- DATABASE TEST END --------\n");
+    }
+    
+    
 }
 
