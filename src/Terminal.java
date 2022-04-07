@@ -10,20 +10,6 @@ public class Terminal {
 
         POSProxy prox = new POSProxy();
 
-        /*
-        TEST - DON'T USE
-         */
-        User testUser = new Cashier(1, "toor", "Herbert Vonschmoof");
-        User lameTestUser = new Cashier(2, "badPassword", "New Tuna on Ice");
-        //addPerm is the perm needed to add permissions;
-        testUser.getPerm().add("addPerm");
-        testUser.addPermissions(lameTestUser, "makeItems");
-        prox.login(lameTestUser);
-        prox.display(lameTestUser.permissions);
-        /*
-        END TEST
-         */
-        
         //Database testing
         Scanner scanner = new Scanner(System.in);
         DBtesting(scanner);
@@ -142,11 +128,16 @@ public class Terminal {
     public static boolean authUser(int id, String hash){
 
     return false;}
-    
-    
+
+    //TODO - move log in and out controllers for the database into the POSProxy class.
     //Messy. Demonstrates basic database functionality. Not much error checking.
     public static void DBtesting(Scanner scanner) throws FileNotFoundException {
-		Database DB = new Database("../database.csv");
+        Database DB;
+        try {
+            DB = new Database("../database.csv");
+        }catch(Exception e){
+            DB = new Database(("database.csv"));
+        }
 		DB.print();
 		System.out.println();
         

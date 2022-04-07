@@ -1,5 +1,5 @@
 id,num,name,pass,perms,loggedin
-0,55,Sam,Password,Manager cash,true,
+0,-1,-1,-1,-1,-1,
 1,27,Joe,PASS123,cash,true,
 2,34,Morgan,Word,cash,true,
 3,63,Guy,UHOH,cash,true,
