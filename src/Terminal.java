@@ -7,7 +7,9 @@ public class Terminal {
     public static void main(String[] args) throws FileNotFoundException  {
 
         title();
-
+        TerminalWindow tw = new TerminalWindow();
+        tw.LoginWindow();
+        
         POSProxy prox = new POSProxy();
 
         //Database testing
