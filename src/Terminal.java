@@ -138,14 +138,7 @@ public class Terminal {
 
     //TODO - move log in and out controllers for the database into the POSProxy class.
     //Messy. Demonstrates basic database functionality. Not much error checking.
-    public static void DBtesting(Scanner scanner) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {
-    	System.out.println("Hashing ''hello''");
-    	System.out.println(hashPass("Hello"));
-    	System.out.println(hashPass("How"));
-    	System.out.println(hashPass("Are"));
-    	System.out.println(hashPass("You Today"));
-    	System.out.println(hashPass("You Today").equals(hashPass("You Today")));
-    	
+    public static void DBtesting(Scanner scanner) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {    	
     	
 		Database DB = Database.getInstance("../database.csv");
 		DB.print();
@@ -179,7 +172,7 @@ public class Terminal {
         	System.out.print("\nEnter password: ");
         	String pass = hashPass(scanner.nextLine());
         	if(DB.logout(userID, pass) == 1) {
-        		System.out.println(DB.getName(userID) + ", you have successfully logged out.");
+        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
         	} else if(DB.logout(userID, pass) == 0){
         		System.out.println(DB.getName(userID) + ", you are already logged out!");
         	} else {
@@ -193,33 +186,33 @@ public class Terminal {
         DB.print();
         
         
-        //Delete user
-        System.out.print("Enter user id to delete: "); //11
-        userID = scanner.nextInt();
-        scanner.nextLine(); //dump \n
-        if(DB.deleteUser(userID)) {
-        	System.out.println("User successfully deleted.");
-        } else {
-        	System.out.println("No such user to delete.");
-        }
-        
-        System.out.println();
-        DB.print();
-        
-        
-        //Add user
-        System.out.println("\nAdding a user...");
-        String[] newUserInfo = {"11","Sam",hashPass("aPASS"),"cash","false"};
-        if(DB.addUser(newUserInfo) == 1) {
-        	System.out.println("New user successfully added.");
-        } else if(DB.addUser(newUserInfo) == -1) {
-        	System.out.println("No space to add user. Please fire someone then try again.");
-        } else {
-        	System.out.println("A user with that id number already exists!");
-        }
-        
-        System.out.println();
-        DB.print();
+//        //Delete user
+//        System.out.print("Enter user id to delete: "); //11
+//        userID = scanner.nextInt();
+//        scanner.nextLine(); //dump \n
+//        if(DB.deleteUser(userID)) {
+//        	System.out.println("User successfully deleted.");
+//        } else {
+//        	System.out.println("No such user to delete.");
+//        }
+//        
+//        System.out.println();
+//        DB.print();
+//        
+//        
+//        //Add user
+//        System.out.println("\nAdding a user...");
+//        String[] newUserInfo = {"11","Sam",hashPass("aPASS"),"cash","false"};
+//        if(DB.addUser(newUserInfo) == 1) {
+//        	System.out.println("New user successfully added.");
+//        } else if(DB.addUser(newUserInfo) == -1) {
+//        	System.out.println("No space to add user. Please fire someone then try again.");
+//        } else {
+//        	System.out.println("A user with that id number already exists!");
+//        }
+//        
+//        System.out.println();
+//        DB.print();
         
         System.out.println("-------- DATABASE TEST END --------\n");
     }
