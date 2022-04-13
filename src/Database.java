@@ -1,9 +1,9 @@
-//I'll fix this more later
 //By Alex
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -12,7 +12,6 @@ public class Database {
 	private static String[][] database = new String[10][8]; //max 10 users currently
 	private static String filePath = "";
 	private static int highestID = 0;
-	// private static int currentUser = 0;
 	
 	private Database(String file) throws FileNotFoundException {
 		filePath = file;
@@ -42,8 +41,7 @@ public class Database {
 			if(Integer.parseInt(database[i][1]) > highestID) {
 				highestID = Integer.parseInt(database[i][1]);
 			}
-		}
-		
+		}		
 			
 	}
 	
@@ -92,13 +90,12 @@ public class Database {
 	}
 	
 	
-	//Used for creating users (Returns current highest user ID)
-	private boolean hasChangePerms(int id) {
+	//Checks that the logged in user has change perms
+	private boolean hasChangePerms() {
 		for(int i = 0; i < 10; i++) {
-			if(Integer.parseInt(database[i][1]) != id) {
-				continue;
+			if(database[i][5].equals("true") && database[i][4].contains("manage")) {
+				return true;
 			}
-			return database[i][4].contains("manage");
 		}
 		return false;
 	}
@@ -179,41 +176,50 @@ public class Database {
 	
 	//Deletes a user from the database given their user id
 	//1 - succeeded, 0 - no such user, -1 no perms
-	public boolean deleteUser(int id) throws FileNotFoundException {
-		// if(!hasChangePerms(id)) { return -1; }
+	public int deleteUser(int id) throws FileNotFoundException {
+		if(!hasChangePerms()) { return -1; }
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 8; i++) {
 				database[row][i] = "-1";
 			}
 			instance.update();
-			return true;
+			return 1;
 		}
 		instance.update();
-		return false;
+		return 0;
 	}
 	
 	//Adds a user to the database given their info in an array
 	//of strings - should be a user object?
-	// false - no space, true - successful
-	public boolean addUser(String[] info) throws FileNotFoundException {
-		// if(!hasChangePerms(id)) { return -1; }
-			for(int i = 0; i < 10; i++) { //find an empty row to insert into
-				if(database[i][1] != "-1") {continue;}
-				
-				String[] newUser = {i + "", ++highestID + "", info[0], info[1], info[2], "false", "0", "0"};
-				
-				for(int j = 0; j < 8; j++) { //add new user to database
-					database[i][j] = newUser[j]; 
-				}				
-				
-				instance.update();
-				return true;
-			}
+	//1 - succeeded, 0 - no space, -1 no perms
+	public int addUser(String[] info) throws FileNotFoundException {
+		if(!hasChangePerms()) { return -1; }
+		for(int i = 0; i < 10; i++) { //find an empty row to insert into
+			if(database[i][1] != "-1") {continue;}
+			
+			String[] newUser = {i + "", ++highestID + "", info[0], info[1], info[2], "false", "0", "0"};
+			
+			for(int j = 0; j < 8; j++) { //add new user to database
+				database[i][j] = newUser[j]; 
+			}				
+			
 			instance.update();
-			return false;
+			return 1;
+		}
+		instance.update();
+		return 0;
 	}
 
+	
+	//Create and return arraylist of users from Database
+	public ArrayList<User> getUsers() {
+		
+		
+		
+		return null;
+	}
+	
 }
 
 
