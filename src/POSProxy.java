@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+
 public class POSProxy extends Service{
 
     //by Mason
@@ -5,7 +7,8 @@ public class POSProxy extends Service{
         if(user.getPerm().contains(perm)){
             return true;
         }
-    return false;}
+        return false;
+    }
 
     @Override
     void login(User user) {
@@ -14,61 +17,58 @@ public class POSProxy extends Service{
         }
     }
     
+    //by Alex below
     
-    
-
-//IGNORE THIS FOR NOW 
-//  	
-//  	public static Database getInstance(String file) throws FileNotFoundException {
-//      }
-//  	
-//  	public void print() {
-//
-//  	}
-//  	  	
-//  	//Check if a user exists by user id
-//  	public boolean findUser(int id) {
-//
-//  	}
-//  	
-//  	//Logs user in, given id # and password
-//  	//-1 = bad pass, 0 = logged in already, 1 = log in
-//  	public int login(int id, String hashedPass) {
-//
-//  	}
-//  	
-//  	//Logs user out, given id # and password
-//  	//-1 = bad pass, 0 = logged out already, 1 = log out
-//  	public int logout(int id, String hashedPass) {
-//
-//  	}
-//  	
-//  	//Name from id #
-//  	public String getName(int id) {
-//
-//  	}
-//  	
-//  	
-//  	//used for deleting, check perms somewhere else.
-//  	private int getRowNum(int id) {
-//
-//  	}
-//  	
-//  	//Deletes a user from the database given their user id
-//  	//true - deleted, false - no one to delete
-//  	public boolean deleteUser(int id) throws FileNotFoundException {
-//
-//  	}
-//  	
-//  	//Adds a user to the database given all of their info in an array
-//  	//of strings - should be a user object?
-//  	// -1 = no space, 0 = already exists, 1 = added
-//  	public int addUser(String[] info) throws FileNotFoundException {
-//
-//
-//  }
-
-
-
+	//Logs user in, given id #, password, and Database
+	public String logIn(int id, String hashedPass, Database DB) {
+		String name = DB.getName(id);
+		switch (DB.login(id, hashedPass)) {
+			case 1:
+				return "Welcome, " + name + "! Successfully logged in.";
+			case 0:
+				return name + ", you are already logged in!";
+			case -1:
+				return "Invalid Id # / Password";
+			default:
+				return "An error occurred.";
+		}
+	}
+	
+	
+	//Logs user out, given id #, password, and Database
+	public String logOut(int id, String hashedPass, Database DB) {
+		String name = DB.getName(id);
+		String time = DB.getTime(id);
+		switch (DB.login(id, hashedPass)) {
+			case 1:
+				return name + ", you have successfully logged out. \nYou were logged in for " + time;
+			case 0:
+				return name + ", you are already logged out!";
+			case -1:
+				return "Invalid Id # / Password";
+			default:
+				return "An error occurred.";
+		}
+	}
+	
+	//Deletes a user from the database given user id and Database
+	public String deleteUser(int id, Database DB) throws FileNotFoundException {
+		//CHECK PERMS FIRST
+		if(DB.deleteUser(id)) {
+			return "User successfully deleted.";
+		} else {
+			return "No such user to delete.";
+		}
+	}
+	
+	//Deletes a user from the database given user id and Database
+	public String addUser(String[] info, Database DB) throws FileNotFoundException {
+		//CHECK PERMS FIRST
+		if(DB.addUser(info)) {
+			return "User successfully added.";
+		} else {
+			return "There is no more room in the budget - fire someone and then try again.";
+		}
+	}
 
 }
