@@ -50,7 +50,7 @@ public class Database {
 	}
 		
 	//Update database file to current state of database object
-	public void update() throws FileNotFoundException {
+	private void update() throws FileNotFoundException {
 		PrintStream fout = new PrintStream(new FileOutputStream(filePath));
 		fout.print("id,num,name,pass,perms,loggedin\n");
 		for(int i = 0; i < 10; i++) {
@@ -132,21 +132,23 @@ public class Database {
 	
 	//Deletes a user from the database given their user id
 	//true - deleted, false - no one to delete
-	public boolean deleteUser(int id) {
+	public boolean deleteUser(int id) throws FileNotFoundException {
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 6; i++) {
 				database[row][i] = "-1";
 			}
+			instance.update();
 			return true;
 		}
+		instance.update();
 		return false;
 	}
 	
 	//Adds a user to the database given all of their info in an array
 	//of strings - should be a user object?
-	//true - added, false - already exists
-	public boolean addUser(String[] info) {
+	// -1 = no space, 0 = already exists, 1 = added
+	public int addUser(String[] info) throws FileNotFoundException {
 		int row = getRowNum(Integer.parseInt(info[0]));
 		if(row == -1) { //user doesn't already exist
 			for(int i = 0; i < 10; i++) { //find an empty row to insert into
@@ -157,12 +159,14 @@ public class Database {
 				for(int j = 0; j < 5; j++) { //fill rest of info
 					database[i][j+1] = info[j]; 
 				}
-				return true;
+				instance.update();
+				return 1;
 			}
-			return false;
+			instance.update();
+			return -1;
 		}
-		return false;
-
+		instance.update();
+		return 0;
 	}
 
 }

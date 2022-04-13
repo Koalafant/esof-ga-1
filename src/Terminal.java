@@ -7,8 +7,8 @@ public class Terminal {
     public static void main(String[] args) throws FileNotFoundException  {
 
         title();
-        TerminalWindow tw = new TerminalWindow();
-        tw.LoginWindow();
+        //TerminalWindow tw = new TerminalWindow();
+        //tw.LoginWindow();
         
         POSProxy prox = new POSProxy();
 
@@ -155,7 +155,6 @@ public class Terminal {
         } else {
         	System.out.println("Invalid user ID.");
         }
-        DB.update();
         System.out.println();
         DB.print();
         
@@ -177,7 +176,6 @@ public class Terminal {
         	System.out.println("Invalid user ID.");
         }
         
-        DB.update();
         System.out.println();
         DB.print();
         
@@ -192,21 +190,21 @@ public class Terminal {
         	System.out.println("No such user to delete.");
         }
         
-        DB.update();
         System.out.println();
         DB.print();
         
         
         //Add user
         System.out.println("\nAdding a user...");
-        String[] newUserInfo = {"11", "Sam2", "aPASS", "cash", "false"};
-        if(DB.addUser(newUserInfo)) {
+        String[] newUserInfo = {"12", "Sam3", "aPASS", "cash", "false"};
+        if(DB.addUser(newUserInfo) == 1) {
         	System.out.println("New user successfully added.");
-        } else {
+        } else if(DB.addUser(newUserInfo) == -1) {
         	System.out.println("No space to add user. Please fire someone then try again.");
+        } else {
+        	System.out.println("A user with that id number already exists!");
         }
         
-        DB.update();
         System.out.println();
         DB.print();
         
