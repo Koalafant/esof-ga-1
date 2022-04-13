@@ -1,14 +1,18 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Terminal {
-    public static void main(String[] args) throws FileNotFoundException  {
+    public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 
         title();
-        TerminalWindow tw = new TerminalWindow();
-        tw.LoginWindow();
+        //TerminalWindow tw = new TerminalWindow();
+        //tw.LoginWindow();
         
         POSProxy prox = new POSProxy();
 
@@ -27,12 +31,12 @@ public class Terminal {
                 continue;
             }
             //gather and hash password
-            String hash = hashPass(scanner, id);
+            //String hash = hashPass(scanner, id);
 
             //if hash is correct, log user in
            //TODO - must add file to keep track of users.
            //TODO - "user" must be built from this todo file.
-            boolean validated = authUser(id, hash);
+            boolean validated = true; // authUser(id, hash);
             if(validated){
                 //prox.login(user);
             }
@@ -120,11 +124,12 @@ public class Terminal {
         }
     }
 
-    public static String hashPass(Scanner scanner, int id){
-        System.out.printf("Enter Password for User %d: ", id);
-        //do not store password in any variable!
-        //TODO - Rory - Hash in SHA-256 or AES.
-        return "a";
+    //by Alex
+    public static String hashPass(String pass) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+    	MessageDigest md = MessageDigest.getInstance("SHA-256");
+    	BigInteger bigInt = new BigInteger(md.digest(pass.getBytes("UTF-8"))); 
+    	String hashedPass = bigInt.toString(16);
+    	return hashedPass;
     }
 
     public static boolean authUser(int id, String hash){
@@ -133,7 +138,15 @@ public class Terminal {
 
     //TODO - move log in and out controllers for the database into the POSProxy class.
     //Messy. Demonstrates basic database functionality. Not much error checking.
-    public static void DBtesting(Scanner scanner) throws FileNotFoundException {
+    public static void DBtesting(Scanner scanner) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    	System.out.println("Hashing ''hello''");
+    	System.out.println(hashPass("Hello"));
+    	System.out.println(hashPass("How"));
+    	System.out.println(hashPass("Are"));
+    	System.out.println(hashPass("You Today"));
+    	System.out.println(hashPass("You Today").equals(hashPass("You Today")));
+    	
+    	
 		Database DB = Database.getInstance("../database.csv");
 		DB.print();
 		System.out.println();
@@ -144,7 +157,7 @@ public class Terminal {
         scanner.nextLine(); //dump \n
         if(DB.findUser(userID)) {
         	System.out.print("\nEnter password: ");
-        	String pass = scanner.nextLine();
+        	String pass = hashPass(scanner.nextLine());
         	if(DB.login(userID, pass) == 1) {
         		System.out.println("\nWelcome, " + DB.getName(userID) + "! Successfully logged in.");
         	} else if(DB.login(userID, pass) == 0){
@@ -164,9 +177,9 @@ public class Terminal {
         scanner.nextLine(); //dump \n
         if(DB.findUser(userID)) {
         	System.out.print("\nEnter password: ");
-        	String pass = scanner.nextLine();
+        	String pass = hashPass(scanner.nextLine());
         	if(DB.logout(userID, pass) == 1) {
-        		System.out.println(DB.getName(userID) + ", you have sccessfully logged out.");
+        		System.out.println(DB.getName(userID) + ", you have successfully logged out.");
         	} else if(DB.logout(userID, pass) == 0){
         		System.out.println(DB.getName(userID) + ", you are already logged out!");
         	} else {
@@ -196,7 +209,7 @@ public class Terminal {
         
         //Add user
         System.out.println("\nAdding a user...");
-        String[] newUserInfo = {"12", "Sam3", "aPASS", "cash", "false"};
+        String[] newUserInfo = {"11","Sam",hashPass("aPASS"),"cash","false"};
         if(DB.addUser(newUserInfo) == 1) {
         	System.out.println("New user successfully added.");
         } else if(DB.addUser(newUserInfo) == -1) {
