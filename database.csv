@@ -1,11 +1,11 @@
 id,num,name,pass,perms,loggedin
-0,-1,-1,-1,-1,-1,
+0,12,Sam3,aPASS,cash,false,
 1,27,Joe,PASS123,cash,true,
 2,34,Morgan,Word,cash,true,
 3,63,Guy,UHOH,cash,true,
 4,73,Max,asfda,cash,true,
 5,56,Rachel,H3LL0,cash,false,
 6,33,Will,Dragon1,cash,false,
-7,96,Jane,HelpMe,cash,true,
+7,96,Jane,HelpMe,cash,false,
 8,76,Danny,passWORD,cash,true,
 9,11,Sam2,aPASS,cash,false,
