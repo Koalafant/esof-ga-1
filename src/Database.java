@@ -212,6 +212,7 @@ public class Database {
 	}
 
 	
+	//Create and return arraylist of users from Database
 	public ArrayList<User> getUsers() {
 		
 		

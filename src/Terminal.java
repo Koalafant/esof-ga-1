@@ -126,6 +126,7 @@ public class Terminal {
 
     public static void initialize() throws FileNotFoundException {
     	Database DB = Database.getInstance("../database.csv");
+    	//Arraylist of Users
     }
     
     //by Alex
