@@ -23,6 +23,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
+
         setSize(400, 200);
         setLocation(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
