@@ -144,75 +144,73 @@ public class Terminal {
 		DB.print();
 		System.out.println();
         
-        //Login
-        System.out.print("Enter user id to log in: ");
-        int userID = scanner.nextInt();
-        scanner.nextLine(); //dump \n
-        if(DB.findUser(userID)) {
-        	System.out.print("\nEnter password: ");
-        	String pass = hashPass(scanner.nextLine());
-        	if(DB.login(userID, pass) == 1) {
-        		System.out.println("\nWelcome, " + DB.getName(userID) + "! Successfully logged in.");
-        	} else if(DB.login(userID, pass) == 0){
-        		System.out.println(DB.getName(userID) + ", you are already logged in!");
-        	} else {
-        		System.out.println("Incorrect password.");
-        	}
-        } else {
-        	System.out.println("Invalid user ID.");
-        }
-        System.out.println();
-        DB.print();
-        
-        //Logout
-        System.out.print("Enter user id to log out: ");
-        userID = scanner.nextInt();
-        scanner.nextLine(); //dump \n
-        if(DB.findUser(userID)) {
-        	System.out.print("\nEnter password: ");
-        	String pass = hashPass(scanner.nextLine());
-        	if(DB.logout(userID, pass) == 1) {
-        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
-        	} else if(DB.logout(userID, pass) == 0){
-        		System.out.println(DB.getName(userID) + ", you are already logged out!");
-        	} else {
-        		System.out.println("Incorrect password.");
-        	}
-        } else {
-        	System.out.println("Invalid user ID.");
-        }
-        
-        System.out.println();
-        DB.print();
-        
-        
-//        //Delete user
-//        System.out.print("Enter user id to delete: "); //11
+//        //Login
+//        System.out.print("Enter user id to log in: ");
+//        int userID = scanner.nextInt();
+//        scanner.nextLine(); //dump \n
+//        if(DB.userExists(userID)) {
+//        	System.out.print("\nEnter password: ");
+//        	String pass = hashPass(scanner.nextLine());
+//        	if(DB.login(userID, pass) == 1) {
+//        		System.out.println("\nWelcome, " + DB.getName(userID) + "! Successfully logged in.");
+//        	} else if(DB.login(userID, pass) == 0){
+//        		System.out.println(DB.getName(userID) + ", you are already logged in!");
+//        	} else {
+//        		System.out.println("Incorrect password.");
+//        	}
+//        } else {
+//        	System.out.println("Invalid user ID.");
+//        }
+//        System.out.println();
+//        DB.print();
+//        
+//        //Logout
+//        System.out.print("Enter user id to log out: ");
 //        userID = scanner.nextInt();
 //        scanner.nextLine(); //dump \n
-//        if(DB.deleteUser(userID)) {
-//        	System.out.println("User successfully deleted.");
+//        if(DB.userExists(userID)) {
+//        	System.out.print("\nEnter password: ");
+//        	String pass = hashPass(scanner.nextLine());
+//        	if(DB.logout(userID, pass) == 1) {
+//        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
+//        	} else if(DB.logout(userID, pass) == 0){
+//        		System.out.println(DB.getName(userID) + ", you are already logged out!");
+//        	} else {
+//        		System.out.println("Incorrect password.");
+//        	}
 //        } else {
-//        	System.out.println("No such user to delete.");
+//        	System.out.println("Invalid user ID.");
 //        }
 //        
 //        System.out.println();
 //        DB.print();
-//        
-//        
-//        //Add user
-//        System.out.println("\nAdding a user...");
-//        String[] newUserInfo = {"11","Sam",hashPass("aPASS"),"cash","false"};
-//        if(DB.addUser(newUserInfo) == 1) {
-//        	System.out.println("New user successfully added.");
-//        } else if(DB.addUser(newUserInfo) == -1) {
-//        	System.out.println("No space to add user. Please fire someone then try again.");
-//        } else {
-//        	System.out.println("A user with that id number already exists!");
-//        }
-//        
-//        System.out.println();
-//        DB.print();
+        
+        
+        //Delete user
+        System.out.print("Enter user id to delete: "); //11
+        int userID = scanner.nextInt();
+        scanner.nextLine(); //dump \n
+        if(DB.deleteUser(userID)) {
+        	System.out.println("User successfully deleted.");
+        } else {
+        	System.out.println("No such user to delete.");
+        }
+        
+        System.out.println();
+        DB.print();
+        
+        
+        //Add user
+        System.out.println("\nAdding a user...");
+        String[] newUserInfo = {"Sam",hashPass("aPASS"),"cash"};
+        if(DB.addUser(newUserInfo)) {
+        	System.out.println("New user successfully added.");
+        } else {
+        	System.out.println("No space to add user. Please fire someone then try again.");
+        }
+        
+        System.out.println();
+        DB.print();
         
         System.out.println("-------- DATABASE TEST END --------\n");
     }
