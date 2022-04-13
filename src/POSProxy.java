@@ -29,6 +29,8 @@ public class POSProxy extends Service{
 				return name + ", you are already logged in!";
 			case -1:
 				return "Invalid Id # / Password";
+			case -2:
+				return "Someone is already logged in";
 			default:
 				return "An error occurred.";
 		}
@@ -39,13 +41,15 @@ public class POSProxy extends Service{
 	public String logOut(int id, String hashedPass, Database DB) {
 		String name = DB.getName(id);
 		String time = DB.getTime(id);
-		switch (DB.login(id, hashedPass)) {
+		switch (DB.logout(id, hashedPass)) {
 			case 1:
 				return name + ", you have successfully logged out. \nYou were logged in for " + time;
 			case 0:
 				return name + ", you are already logged out!";
 			case -1:
 				return "Invalid Id # / Password";
+			case -2:
+				return "No one is currently logged in";
 			default:
 				return "An error occurred.";
 		}
