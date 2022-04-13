@@ -23,12 +23,19 @@ public class TerminalWindow extends JFrame implements ActionListener{
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
+        ImageIcon logo = new ImageIcon("images/logo.png");
+        Image image = logo.getImage();
+        setIconImage(image);
 
         setSize(400, 200);
         setLocation(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Login Page");
         add(panel);
+
+        JLabel otherLogo = new JLabel(logo);
+        otherLogo.setBounds(277, 20, 120, 120);
+        panel.add(otherLogo);
 
         usernameLabel = new JLabel("Username");
         usernameLabel.setBounds(100, 8, 70, 20);
@@ -52,7 +59,6 @@ public class TerminalWindow extends JFrame implements ActionListener{
         loginButton.setBackground(Color.BLACK);
         loginButton.addActionListener((ActionListener) this);
         panel.add(loginButton);
-        
 
         setVisible(true);
     }
