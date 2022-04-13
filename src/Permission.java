@@ -49,11 +49,19 @@ public class Permission {
     public static void main(String[] args){
         //Test Cashier
         ArrayList<Permission> cashierPermissions = new ArrayList<Permission>();
-        Permission Cashier = new Permission("Cashier", "has read permissions", cashierPermissions);
-        Permission Read = new Permission("Read", "Read menu items");
-        Permission Write = new Permission("Write", "Add menu items");
+        Permission cashier = new Permission("Cashier", "has read permissions", cashierPermissions);
+        Permission read = new Permission("Read", "Read menu items");
+        Permission write = new Permission("Write", "Add menu items");
 
-        Cashier.addPermission(Read);
-        System.out.println(Cashier.hasPermissions());
+        cashier.addPermission(read);
+        System.out.println(cashier.hasPermissions());
+
+        //Test Manager
+        ArrayList<Permission> managerPermissions = new ArrayList<Permission>();
+        Permission manager = new Permission("Manager", "has read permissions and write permissions", managerPermissions);
+        
+        manager.addPermission(read);
+        manager.addPermission(write);
+        System.out.println(manager.hasPermissions());
     }
 }
