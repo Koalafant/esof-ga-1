@@ -124,6 +124,10 @@ public class Terminal {
         }
     }
 
+    public static void initialize() throws FileNotFoundException {
+    	Database DB = Database.getInstance("../database.csv");
+    }
+    
     //by Alex
     public static String hashPass(String pass) throws NoSuchAlgorithmException, UnsupportedEncodingException{
     	MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -167,54 +171,58 @@ public class Terminal {
         DB.print();
         
         //Logout
-        System.out.print("Enter user id to log out: ");
+//        System.out.print("Enter user id to log out: ");
+//        userID = scanner.nextInt();
+//        scanner.nextLine(); //dump \n
+//        if(DB.userExists(userID)) {
+//        	System.out.print("\nEnter password: ");
+//        	String pass = hashPass(scanner.nextLine());
+//        	if(DB.logout(userID, pass) == 1) {
+//        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
+//        	} else if(DB.logout(userID, pass) == 0){
+//        		System.out.println(DB.getName(userID) + ", you are already logged out!");
+//        	} else if(DB.logout(userID, pass) == -1){
+//        		System.out.println("Incorrect password.");
+//        	} else {
+//        		System.out.println("No one is logged in!");
+//        	}
+//        } else {
+//        	System.out.println("Invalid user ID.");
+//        }
+//        
+//        System.out.println();
+//        DB.print();
+
+        
+        //Delete user
+        System.out.print("Enter user id to delete: "); //11
         userID = scanner.nextInt();
         scanner.nextLine(); //dump \n
-        if(DB.userExists(userID)) {
-        	System.out.print("\nEnter password: ");
-        	String pass = hashPass(scanner.nextLine());
-        	if(DB.logout(userID, pass) == 1) {
-        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
-        	} else if(DB.logout(userID, pass) == 0){
-        		System.out.println(DB.getName(userID) + ", you are already logged out!");
-        	} else if(DB.logout(userID, pass) == -1){
-        		System.out.println("Incorrect password.");
-        	} else {
-        		System.out.println("No one is logged in!");
-        	}
+        if(DB.deleteUser(userID) == 1) {
+        	System.out.println("User successfully deleted.");
+        } else if(DB.deleteUser(userID) == 0) {
+        	System.out.println("No such user to delete.");
         } else {
-        	System.out.println("Invalid user ID.");
+        	System.out.println("No perms");
         }
         
         System.out.println();
         DB.print();
-      
         
-//        //Delete user
-//        System.out.print("Enter user id to delete: "); //11
-//        int userID = scanner.nextInt();
-//        scanner.nextLine(); //dump \n
-//        if(DB.deleteUser(userID)) {
-//        	System.out.println("User successfully deleted.");
-//        } else {
-//        	System.out.println("No such user to delete.");
-//        }
-//        
-//        System.out.println();
-//        DB.print();
-//        
-//        
-//        //Add user
-//        System.out.println("\nAdding a user...");
-//        String[] newUserInfo = {"Sam",hashPass("aPASS"),"cash manage"};
-//        if(DB.addUser(newUserInfo)) {
-//        	System.out.println("New user successfully added.");
-//        } else {
-//        	System.out.println("No space to add user. Please fire someone then try again.");
-//        }
-//        
-//        System.out.println();
-//        DB.print();
+        
+        //Add user
+        System.out.println("\nAdding a user...");
+        String[] newUserInfo = {"Sam",hashPass("aPASS"),"cash manage"};
+        if(DB.addUser(newUserInfo) == 1) {
+        	System.out.println("User successfully added.");
+        } else if(DB.deleteUser(userID) == 0) {
+        	System.out.println("No space.");
+        } else {
+        	System.out.println("No perms");
+        }
+        
+        System.out.println();
+        DB.print();
         
         System.out.println("-------- DATABASE TEST END --------\n");
     }

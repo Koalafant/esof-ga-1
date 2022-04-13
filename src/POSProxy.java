@@ -57,21 +57,29 @@ public class POSProxy extends Service{
 	
 	//Deletes a user from the database given user id and Database
 	public String deleteUser(int id, Database DB) throws FileNotFoundException {
-		//CHECK PERMS FIRST
-		if(DB.deleteUser(id)) {
-			return "User successfully deleted.";
-		} else {
-			return "No such user to delete.";
+		switch (DB.deleteUser(id)) {
+			case 1:
+				return "User successfully deleted.";
+			case 0:
+				return "No such user to delete.";
+			case -1:
+				return "You do not have permission to delete a user";
+			default:
+				return "An error occurred.";
 		}
 	}
 	
 	//Deletes a user from the database given user id and Database
 	public String addUser(String[] info, Database DB) throws FileNotFoundException {
-		//CHECK PERMS FIRST
-		if(DB.addUser(info)) {
-			return "User successfully added.";
-		} else {
-			return "There is no more room in the budget - fire someone and then try again.";
+		switch (DB.addUser(info)) {
+			case 1:
+				return "User successfully added.";
+			case 0:
+				return "There is no more room in the budget - fire someone and then try again.";
+			case -1:
+				return "You do not have permission to add a user";
+			default:
+				return "An error occurred.";
 		}
 	}
 
