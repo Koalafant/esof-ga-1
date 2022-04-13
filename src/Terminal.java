@@ -146,7 +146,7 @@ public class Terminal {
     
     //Messy. Demonstrates basic database functionality. Not much error checking.
     public static void DBtesting(Scanner scanner) throws FileNotFoundException {
-		Database DB = new Database("../database.csv");
+		Database DB = Database.getInstance("../database.csv");
 		DB.print();
 		System.out.println();
         
