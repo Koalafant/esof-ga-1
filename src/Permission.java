@@ -21,8 +21,8 @@ public class Permission {
     }
 
     //Create a list of abilities that the permission has
-    public ArrayList<Permission> hasPermissions(){
-        return permissions;
+    public boolean hasPermission(Permission perm){
+        return permissions.contains(perm);
     }
 
     //Add permission to system
@@ -45,6 +45,10 @@ public class Permission {
         return description;
     }
 
+    public ArrayList<Permission> getPermissions(){
+        return permissions;
+    }
+
     // TESTING CODE
     public static void main(String[] args){
         //Test Cashier
@@ -54,14 +58,17 @@ public class Permission {
         Permission write = new Permission("Write", "Add menu items");
 
         cashier.addPermission(read);
-        System.out.println(cashier.hasPermissions());
+        System.out.println(cashier.hasPermission(read));
 
         //Test Manager
         ArrayList<Permission> managerPermissions = new ArrayList<Permission>();
         Permission manager = new Permission("Manager", "has read permissions and write permissions", managerPermissions);
-        
+
         manager.addPermission(read);
         manager.addPermission(write);
-        System.out.println(manager.hasPermissions());
+        System.out.println(manager.hasPermission(write));
+
+        manager.removePermission(write);
+        System.out.println(manager.hasPermission(write));
     }
 }
