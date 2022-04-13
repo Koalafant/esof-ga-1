@@ -12,6 +12,7 @@ public class Database {
 	private static String[][] database = new String[10][8]; //max 10 users currently
 	private static String filePath = "";
 	private static int highestID = 0;
+	// private static int currentUser = 0;
 	
 	private Database(String file) throws FileNotFoundException {
 		filePath = file;
@@ -91,11 +92,28 @@ public class Database {
 	}
 	
 	
-	private int getHighestID() {
-		return highestID;
+	//Used for creating users (Returns current highest user ID)
+	private boolean hasChangePerms(int id) {
+		for(int i = 0; i < 10; i++) {
+			if(Integer.parseInt(database[i][1]) != id) {
+				continue;
+			}
+			return database[i][4].contains("manage");
+		}
+		return false;
 	}
 	
-	//used for deleting, check perms somewhere else.
+	//Returns whether someone is currently logged in
+	private boolean loggedIn() {
+		for(int i = 0; i < 10; i++) {
+			if(database[i][5].equals("true")) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
+	//Used for deleting users
 	private int getRowNum(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) {
@@ -123,6 +141,7 @@ public class Database {
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
 	public int login(int id, String hashedPass) {
+		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			if(hashedPass.equals(database[i][3])) {
@@ -141,6 +160,7 @@ public class Database {
 	//Logs user out, given id # and password
 	//-1 = bad pass, 0 = logged out already, 1 = log out
 	public int logout(int id, String hashedPass) {
+		if(!loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			if(hashedPass.equals(database[i][3])) {
@@ -158,8 +178,9 @@ public class Database {
 	}
 	
 	//Deletes a user from the database given their user id
-	//true - deleted, false - no one to delete
+	//1 - succeeded, 0 - no such user, -1 no perms
 	public boolean deleteUser(int id) throws FileNotFoundException {
+		// if(!hasChangePerms(id)) { return -1; }
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 8; i++) {
@@ -176,6 +197,7 @@ public class Database {
 	//of strings - should be a user object?
 	// false - no space, true - successful
 	public boolean addUser(String[] info) throws FileNotFoundException {
+		// if(!hasChangePerms(id)) { return -1; }
 			for(int i = 0; i < 10; i++) { //find an empty row to insert into
 				if(database[i][1] != "-1") {continue;}
 				
