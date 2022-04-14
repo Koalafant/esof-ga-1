@@ -7,8 +7,7 @@ public class Permission {
     //Initialize fields
     String permissionName;
     String description;
-    HashMap<User, Permissions> userPerms = new HashMap<User, Permissions>();
-    ArrayList<Permission> permissions;
+    HashMap<Permissions, Boolean> userPerms = new HashMap<Permissions, Boolean>();
 
     enum Permissions{
         ADD_ITEM,
@@ -20,32 +19,31 @@ public class Permission {
         VIEW_RECEIPT,
     }
     //Init a permission using a name, description, and a list of abilities/permissions
-    protected Permission(String permName, String permDesc, ArrayList<Permission> perms){
-        permissionName = permName;
-        description = permDesc;
-        permissions = perms;
-    }
-
-    //Secondary Constructor for just name and description
     protected Permission(String permName, String permDesc){
         permissionName = permName;
         description = permDesc;
     }
 
-    //Create a list of abilities that the permission has
-    public boolean hasPermission(Permission perm){
-        return permissions.contains(perm);
+    //Secondary Constructor for just name and description
+//    protected Permission(String permName, String permDesc){
+//        permissionName = permName;
+//        description = permDesc;
+//    }
+
+    //Check to HashMap for permissions
+    public boolean hasPermission(Permissions perm){
+        return userPerms.containsKey(perm);
     }
 
     //Add permission to system
-    protected void addPermission(Permission perm){
-        permissions.add(perm);
-    }
+//    protected void addPermission(Permission perm){
+//        permissions.add(perm);
+//    }
 
     //Remove permission from system
-    protected void removePermission(Permission perm){
-        permissions.remove(perm);
-    }
+//    protected void removePermission(Permission perm){
+//        permissions.remove(perm);
+//    }
 
     //Get the name of the permission
     public String getPermissionName(){
@@ -57,17 +55,20 @@ public class Permission {
         return description;
     }
 
-    public ArrayList<Permission> getPermissions(){
-        return permissions;
-    }
+//    public ArrayList<Permission> getPermissions(){
+//        return permissions;
+//    }
 
     // TESTING CODE
     public static void main(String[] args){
         //Test Cashier
         ArrayList<Permissions> cashierPermissions = new ArrayList<>(Arrays.asList(Permissions.values()));
         Cashier Joe = new Cashier(123, "123", "Joe");
-        HashMap<Cashier, ArrayList<Permissions>> JoePerms = new HashMap<>();
-        JoePerms.put(Joe, cashierPermissions);
+        Permission wtf = new Permission("Thing", "Stuff Thing");
+        HashMap<Permissions, Boolean> JoePerms = new HashMap<>();
+        JoePerms.put(Permissions.ADD_ITEM, Boolean.TRUE);
+        JoePerms.put(Permissions.VIEW_RECEIPT, Boolean.TRUE);
+        JoePerms.put(Permissions.REMOVE_USER, Boolean.FALSE);
         System.out.println(JoePerms.toString());
 
 
