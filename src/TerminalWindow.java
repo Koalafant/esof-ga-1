@@ -22,6 +22,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
     public void LoginWindow(){
         JPanel panel = new JPanel();
         panel.setLayout(null);
+        panel.setBackground(new Color(230, 230, 230));
 
         ImageIcon logo = new ImageIcon("images/logo.png");
         Image image = logo.getImage();
