@@ -9,7 +9,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
-
+        
+        Database DB = Database.getInstance("database.csv");
         title();
         TerminalWindow tw = new TerminalWindow();
         tw.LoginWindow();

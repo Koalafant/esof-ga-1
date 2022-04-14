@@ -156,7 +156,7 @@ public class Database {
 	
 	//Logs user out, given id # and password
 	//-1 = bad pass, 0 = logged out already, 1 = log out
-	public int logout(int id, String hashedPass) {
+	public static int logout(int id, String hashedPass) {
 		if(!loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
