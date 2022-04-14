@@ -58,7 +58,7 @@ public class Database {
 	}
 	
 	//Check if a user exists by user id
-	public boolean userExists(int id) {
+	public static boolean userExists(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) == id) {
 				return true;
@@ -101,7 +101,7 @@ public class Database {
 	}
 	
 	//Returns whether someone is currently logged in
-	private boolean loggedIn() {
+	private static boolean loggedIn() {
 		for(int i = 0; i < 10; i++) {
 			if(database[i][5].equals("true")) {
 				return true;
@@ -137,7 +137,7 @@ public class Database {
 	
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
-	public int login(int id, String hashedPass) {
+	public static int login(int id, String hashedPass) {
 		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
