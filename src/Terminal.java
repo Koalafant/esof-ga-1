@@ -4,15 +4,19 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import javax.xml.crypto.Data;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 
+        Database DB = Database.getInstance("database.csv");
         title();
-        //TerminalWindow tw = new TerminalWindow();
-        //tw.LoginWindow();
+        TerminalWindow tw = new TerminalWindow();
+        tw.LoginWindow();
         
         POSProxy prox = new POSProxy();
 

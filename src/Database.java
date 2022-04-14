@@ -64,9 +64,9 @@ public class Database {
 	
 	
 	//Check if a user exists by user id
-	public boolean findUser(int id) {
-		for(int i = 0; i < 10; i++) {
-			if(Integer.parseInt(database[i][1]) == id) {
+	public static boolean findUser(int id) {
+		for(int i = 1; i < 10; i++) {
+			if(Integer.parseInt(database[i][0]) == id) {
 				return true;
 			}
 		}
@@ -110,7 +110,7 @@ public class Database {
 	
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
-	public int login(int id, String hashedPass) {
+	public static int login(int id, String hashedPass) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			if(hashedPass.equals(database[i][3])) {
