@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.*;
 
 
@@ -72,7 +74,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
             Boolean validInt = username.getText().matches("-?\\d+");
 
             if(validInt == true){
-                validUser = Database.findUser(Integer.parseInt(username.getText()));                    
+                validUser = Database.findUser(username.getText());
             }
             else{validUser = false;} 
 

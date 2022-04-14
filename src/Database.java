@@ -51,7 +51,11 @@ public class Database {
         }
         return instance;
     }
-	
+
+	public static Boolean findUser(String name) {
+		return false;
+	}
+
 	public void print() {
 		System.out.println(Arrays.deepToString(database).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 
