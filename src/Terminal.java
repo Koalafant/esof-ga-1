@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -10,7 +9,6 @@ import java.security.NoSuchAlgorithmException;
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 
-        title();
         TerminalWindow tw = new TerminalWindow();
         tw.LoginWindow();
         
@@ -67,53 +65,6 @@ public class Terminal {
     }
 
     //by Mason
-    public static void title() {
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::..:....:\n" +
-                ":::::::::::.:::::::..:.....::::::::::::::::::::::::::::~JJ???~:\n" +
-                "::::::::::.::.:..:......::.::::::.:.::.::::.::::::::::.?PPGGP5^\n" +
-                ":::::..::...:..............:.::::.......:.:...::::::::.:JPGGPP!\n" +
-                ":::::::::::::....:.........:.:.:......::..::.:..:.:::::.:YPGP57\n" +
-                ":::::::::::.:::::::::...::::::.:::::::::::::::::::::::::.?PGP5!\n" +
-                ":::::::::.::::::::::::::::::::::::::::::::::::::::::::::.?GGPY:\n" +
-                "::::::::::..:::::::::::::::::::::::::::::::::::::::::::.^YGGPY:\n" +
-                ":::::::::::::::::::::::::::::::::::::::::::::::::      :7Y5P5?::\n" +
-                ".::::::::::::::::.::::::::::::::::::::::::::^^^~~~~     ~~~!?~::::::\n" +
-                ".:::::::::::::::::::::::::...:::::::::::::^~~~~~~~~      ~~~~~~~~~^^::\n" +
-                ":::::::::::.::::::::.::::::.::::::::::::^\t\t                   ~~:\n" +
-                ":::::::::::::::::::::::::::::::::::::.:^~^\t\t\t                   ::\n" +
-                ":::::::::::::::::::::::::::::::::::::^\t\t\t\t                  !^\n" +
-                "::::::::::::::::::::::::::::::::::::^\t\t\t\t                  !~\n" +
-                ":::::::::::::::::::::::::::::::.::^\t\t\t\t                     ~!!^\n" +
-                "::::::::::::::::::::::::::::::::^~\t\t\t\t                      ~!~:\n" +
-                "::::::::::::::::::::::::::::::^~\t\t\t\t                     ~~!!^\n" +
-                "::::::::::::::::::::::::::::^~\t\t\t\t\t                      ~~!!^\n" +
-                ":::::::::::::..:::::::::.:^^\t\t\t\t\t                     ~~~~!~^\n" +
-                ":::::::::::::::::::::::::^\t  _ _\t    _ _ _      _     _ _ _\t          !~^\n" +
-                ".::::::::::::::::::::::\t^\t ||_ _\\    |\t      /\t\\   | _ _ |\n" +
-                "...:::::::::::::::::.:^~~!\t ||_ _ |   |_ _ _    /|\t|\\  | _ _||               ~\n" +
-                "..::::.::..::.::.::..:~~!\t ||_ _/    |_ _ _   |---- | |   \\                !^\n" +
-                "....................:^~!\t ||\t       |\t    |\t  | |    \\\t            !!~\n" +
-                "....................:^\t\t ||\t       |_ _ _   |\t  | |     \\              ~~\n" +
-                "....................:~\t\t         _ _\t   _\t _ _ _\t                 ~~\n" +
-                "....................^~!\t\t        ||_ _\\\t  / \\\t|  _  \\\t\t             !~\n" +
-                "....................^!!!\t        ||_ _ |\t /| |\\\t| | |  |\t             !~\n" +
-                "....................:~!\t            ||_ _/  | ----| | | |  |  \t            !!~\n" +
-                "::::::::::::::::::..:~!\t\t        ||\t    |     |\t| |_|  |\t            !!^\n" +
-                "::::::::::::::::::::.^~!7\t        ||\t    |     |\t|_ _ _/\t\t           7!~:\n" +
-                "::::::::::::::::::::::^!\t\t\t\t\t\t                            !\n" +
-                ":::::::::::::::::::::::^!!\t\t\t\t\t\t                            :\n" +
-                ":::::::::::::::::::::::::~\t\t\t\t\t\t                          ~:\n" +
-                "::::::::::::::::::::::::::^!\t\t\t\t\t\t                     ~^^\n" +
-                ":::::::::::::::::::::^^^^^~~!\t\t\t\t\t\t                    ~~~~^^^\n" +
-                "::::::::::::::::::::^^^~~~!! ~~\t\t\t\t\t\t                          ^\n" +
-                ":::::::::::::::::^^^^^~~~~!!!777?JY55555YYY55555555YY5555555P5555YYJJJJ??77!!\n" +
-                "::::::::::::::::::^^^^^~~~!!!77??JJY5PGGGGGGGGGGGGGGBBBBGGGPP55YYYJJJJ??77!!\n" +
-                ":::::::::::::::::::::^^^^^~~~!!!777???JJYY555PPPPGGGPPPP555YYYJJJ????77!!\n" +
-                ":::::::::::::::::::::::::::^^^^^^~~~~~!!!!!77777??????????77777!!!\n" +
-                ".::::::::::::::::::::::::::::::::::::^^^^^^^^^~~~~~~~~~\n");
-    }
-
-    //by Mason
     public static int gatherID(Scanner scanner){
         System.out.print("User ID: ");
         try {
@@ -124,8 +75,12 @@ public class Terminal {
         }
     }
 
-    public static void initialize() throws FileNotFoundException {
-    	Database DB = Database.getInstance("../database.csv");
+    public static void initialize(){
+        try {
+            Database DB = Database.getInstance("data/database.csv");
+        }catch(FileNotFoundException e){
+            System.out.println("Abort, abort\nThrow the computer away\n3\n2\n1\nEverything is Broken!");
+        }
     	//Arraylist of Users
     }
     
@@ -145,7 +100,7 @@ public class Terminal {
     //Messy. Demonstrates basic database functionality. Not much error checking.
     public static void DBtesting(Scanner scanner) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {    	
     	
-		Database DB = Database.getInstance("../database.csv");
+		Database DB = Database.getInstance("data/database.csv");
 		DB.print();
 		System.out.println();
         
