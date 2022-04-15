@@ -25,6 +25,19 @@ public class Permission {
         this.userPerms = userPerms;
     }
 
+    public static HashMap<Permissions, Boolean> initialize(){
+        HashMap<Permissions, Boolean> ret = new HashMap<>();
+        ret.put(Permissions.ADD_ITEM, false);
+        ret.put(Permissions.REMOVE_ITEM, false);
+        ret.put(Permissions.MODIFY_ITEM, false);
+        ret.put(Permissions.ADD_USER, false);
+        ret.put(Permissions.REMOVE_USER, false);
+        ret.put(Permissions.MODIFY_USER, false);
+        ret.put(Permissions.VIEW_RECEIPT, false);
+
+        return ret;
+    }
+
     //Add an enumed permission and the corresponding boolean to the hashmap
     protected void addPermissionToMap(Permissions enumPerm, Boolean value){userPerms.put(enumPerm, value);}
 

@@ -4,11 +4,10 @@ public class POSProxy extends Service{
 
     //by Mason
     boolean hasPermission(User user, String perm){
-        if(user.getPerm().contains(perm)){
-            return true;
-        }
-        return false;
-    }
+        if(user.hasPerm(perm)){
+
+		}
+	}
 
     @Override
     void login(User user) {
