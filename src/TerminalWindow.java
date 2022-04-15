@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import javax.swing.*;
 
 
@@ -10,9 +8,10 @@ public class TerminalWindow extends JFrame implements ActionListener{
     private static TerminalWindow inst;
 
     private static JLabel passwordLabel, usernameLabel, loginFailure;
-    private static JTextField username;    
+    private static JTextField username, permissions;    
     private static JPasswordField password;
-    private static JButton loginButton;
+    private static JButton loginButton, logoutButton, changePermissions;
+    private static JPanel panel;
     
     public static TerminalWindow getInstance()
     {
@@ -21,20 +20,22 @@ public class TerminalWindow extends JFrame implements ActionListener{
         return inst;
     }
 
-    public void LoginWindow(){
-        JPanel panel = new JPanel();
+    TerminalWindow(){
+        panel = new JPanel();
+        setResizable(false);
         panel.setLayout(null);
         panel.setBackground(new Color(230, 230, 230));
-
-        ImageIcon logo = new ImageIcon("images/logo.png");
-        Image image = logo.getImage();
-        setIconImage(image);
 
         setSize(500, 300);
         setLocation(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Login Page");
         add(panel);
+    }
+    public void LoginWindow(){
+        ImageIcon logo = new ImageIcon("images/logo.png");
+        Image image = logo.getImage();
+        setIconImage(image);
 
         JLabel otherLogo = new JLabel(logo);
         otherLogo.setBounds(277, 20, 120, 120);
@@ -60,13 +61,34 @@ public class TerminalWindow extends JFrame implements ActionListener{
         loginButton.setBounds(150, 110, 90, 25);
         loginButton.setForeground(Color.WHITE);
         loginButton.setBackground(Color.BLACK);
-        loginButton.addActionListener((ActionListener) this);
+        loginButton.addActionListener(this);
         panel.add(loginButton);
 
         setVisible(true);
     }
 
-    
+    public void UserMenu(){
+        
+        changePermissions = new JButton("Permissions");
+        changePermissions.setBounds(140, 110, 90, 25);
+        changePermissions.setForeground(Color.WHITE);
+        changePermissions.setBackground(Color.BLACK);
+        changePermissions.addActionListener(this);
+        panel.add(changePermissions);
+
+        logoutButton = new JButton("Logout");
+        logoutButton.setBounds(260, 110, 90, 25);
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setBackground(Color.BLACK);
+        logoutButton.addActionListener(this);
+        panel.add(logoutButton);
+
+        setVisible(true);
+    }
+
+    public void permissionsMenu(){
+        
+    }
     public void actionPerformed(ActionEvent ae){
         
         if(ae.getActionCommand().equals("Login")){
@@ -75,7 +97,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
             Boolean validInt = username.getText().matches("-?\\d+");
 
             if(validInt == true){
-                validUser = Database.findUser(username.getText());
+                validUser = Database.userExists(Integer.parseInt(username.getText()));
             }
             else{validUser = false;} 
 
@@ -83,19 +105,38 @@ public class TerminalWindow extends JFrame implements ActionListener{
                 
                     try {
                         Database.login(Integer.parseInt(username.getText()), Terminal.hashPass(password.getSelectedText()));
-                    } catch (NumberFormatException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        getContentPane().removeAll();
+                        getContentPane().repaint();
+
+                        UserMenu();
+                      
+                    } catch (Exception e) {
+                        e.getStackTrace();
                     }
+                        
                  
             }
             else{
-                loginFailure = new JLabel("Username not found");
-                loginFailure.setBounds(150, 75, 70, 20);
-                add(loginFailure);
-            }
-            
+                JOptionPane.showMessageDialog(this, "Username not found", "WARNING", JOptionPane.WARNING_MESSAGE);
+                //loginFailure = new JLabel("Username not found");
+                //loginFailure.setBounds(150, 75, 70, 20);
+                //getContentPane().add(loginFailure);
+            }           
         }
-        
+        else if(ae.getActionCommand().equals("Logout")){
+            try{
+                Database.logout(Integer.parseInt(username.getText()), Terminal.hashPass(password.getSelectedText()));
+                getContentPane().removeAll();
+                getContentPane().repaint();
+                LoginWindow();
+            } catch (Exception e){
+                e.getStackTrace();
+            }
+        }   
+        else if(ae.getActionCommand().equals("Permissions")){
+            getContentPane().removeAll();
+            getContentPane().repaint();
+            permissionsMenu();
+        }     
     }
 }
