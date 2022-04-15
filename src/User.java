@@ -1,22 +1,21 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 //By Mason
-public abstract class User {
+public class User {
 
+    HashMap<Permission.Permissions, Boolean> perms;
     public int id;
     public String name;
     private String password;
-    protected ArrayList<String> permissions;
     boolean loggedIn;
 
-    ArrayList<String> getPerm(){
-        return permissions;
+    public User(int id, String name, String hash) {
+        this.id = id;
+        this.name = name;
+        password = hash;
+        perms = Permission.initialize();
+        loggedIn = false;
+        }
     }
-
-    abstract void addPermissions(User user, String perm);
-
-    protected void setPass(String pass){
-        password = pass;
-    }
-}

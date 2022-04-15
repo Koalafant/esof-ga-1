@@ -1,74 +1,92 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 // By Cole
 public class Permission {
     //Initialize fields
     String permissionName;
     String description;
-    ArrayList<Permission> permissions;
+    HashMap<Permissions, Boolean> userPerms = new HashMap<Permissions, Boolean>();
 
-    //Init a permission using a name, description, and a list of abilities/permissions
-    protected Permission(String permName, String permDesc, ArrayList<Permission> perms){
+    //Create enum of set in stone permissions
+    public enum Permissions{
+        ADD_ITEM,
+        REMOVE_ITEM,
+        MODIFY_ITEM,
+        ADD_USER,
+        REMOVE_USER,
+        MODIFY_USER,
+        VIEW_RECEIPT
+    }
+
+    //Init a permission with a name, description, and a HashMap of permissions and bools
+    protected Permission(HashMap<Permissions, Boolean> userPerms, String permName, String permDesc){
         permissionName = permName;
         description = permDesc;
-        permissions = perms;
+        this.userPerms = userPerms;
     }
 
-    //Secondary Constructor for just name and description
-    protected Permission(String permName, String permDesc){
-        permissionName = permName;
-        description = permDesc;
+    public static HashMap<Permissions, Boolean> initialize(){
+        HashMap<Permissions, Boolean> ret = new HashMap<>();
+        ret.put(Permissions.ADD_ITEM, false);
+        ret.put(Permissions.REMOVE_ITEM, false);
+        ret.put(Permissions.MODIFY_ITEM, false);
+        ret.put(Permissions.ADD_USER, false);
+        ret.put(Permissions.REMOVE_USER, false);
+        ret.put(Permissions.MODIFY_USER, false);
+        ret.put(Permissions.VIEW_RECEIPT, false);
+
+        return ret;
     }
 
-    //Create a list of abilities that the permission has
-    public boolean hasPermission(Permission perm){
-        return permissions.contains(perm);
+    //Add an enumed permission and the corresponding boolean to the hashmap
+    protected void addPermissionToMap(Permissions enumPerm, Boolean value){userPerms.put(enumPerm, value);}
+
+    //Remove permission from the hashmap
+    protected void removePermissionsFromMap(Permissions enumPerm){
+        userPerms.remove(enumPerm);
     }
 
-    //Add permission to system
-    protected void addPermission(Permission perm){
-        permissions.add(perm);
+    //Get the whole hashmap of permissions and bools
+    protected void getPermissions(){
+        System.out.println(userPerms);
     }
 
-    //Remove permission from system
-    protected void removePermission(Permission perm){
-        permissions.remove(perm);
+    //Check HashMap for a specific permission
+    public boolean hasPermission(Permissions perm){
+
+        //Check if the required permission is in the Map key.  If it is, check the value and return true/false accordingly
+        if (userPerms.containsKey(perm)){
+            if(userPerms.get(perm)){return true;}
+
+            else{return false;}
+        }
+        else{return false;}
     }
 
     //Get the name of the permission
-    public String getPermissionName(){
-        return permissionName;
-    }
+    public String getPermissionName(){return permissionName;}
 
     //Get the description of the permission
-    public String getPermissionDesc(){
-        return description;
-    }
+    public String getPermissionDesc(){return description;}
 
-    public ArrayList<Permission> getPermissions(){
-        return permissions;
-    }
-
-    // TESTING CODE
+    // TESTING CODE REMOVE WHEN DONE
     public static void main(String[] args){
-        //Test Cashier
-        ArrayList<Permission> cashierPermissions = new ArrayList<Permission>();
-        Permission cashier = new Permission("Cashier", "has read permissions", cashierPermissions);
-        Permission read = new Permission("Read", "Read menu items");
-        Permission write = new Permission("Write", "Add menu items");
-
-        cashier.addPermission(read);
-        System.out.println(cashier.hasPermission(read));
-
-        //Test Manager
-        ArrayList<Permission> managerPermissions = new ArrayList<Permission>();
-        Permission manager = new Permission("Manager", "has read permissions and write permissions", managerPermissions);
-
-        manager.addPermission(read);
-        manager.addPermission(write);
-        System.out.println(manager.hasPermission(write));
-
-        manager.removePermission(write);
-        System.out.println(manager.hasPermission(write));
+        //Initialize a HashMap permission list
+        HashMap<Permissions, Boolean> permListManager = new HashMap<>();
+        //Initialize a permission
+        Permission ManagerPermissions = new Permission(permListManager, "Manager", "Manager permissions");
+        //Test get and addPermissions
+        ManagerPermissions.getPermissions();
+        ManagerPermissions.addPermissionToMap(Permissions.ADD_ITEM, true);
+        ManagerPermissions.getPermissions();
+        //Test hasPermission
+        System.out.println(ManagerPermissions.hasPermission(Permissions.REMOVE_USER));
+        System.out.println(ManagerPermissions.hasPermission(Permissions.ADD_ITEM));
+        //Test removePermission
+        ManagerPermissions.removePermissionsFromMap(Permissions.ADD_ITEM);
+        ManagerPermissions.getPermissions();
+        ManagerPermissions.addPermissionToMap(Permissions.ADD_USER, false);
+        //Testing second layer of checks in hasPermission
+        System.out.println(ManagerPermissions.hasPermission(Permissions.ADD_USER));
     }
 }

@@ -93,6 +93,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
         
         if(ae.getActionCommand().equals("Login")){
             Boolean validUser;
+            System.out.println(username.getText());
             Boolean validInt = username.getText().matches("-?\\d+");
 
             if(validInt == true){

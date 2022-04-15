@@ -8,35 +8,18 @@ import java.security.NoSuchAlgorithmException;
 
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
+
+        //initalize GUI
         TerminalWindow tw = new TerminalWindow();
         tw.LoginWindow();
-        
+
+        //Initialize proxy
         POSProxy prox = new POSProxy();
 
-        //Database testing
-        Scanner scanner = new Scanner(System.in);
-        DBtesting(scanner);
-        
+        //Initialize database
+        Database db = initialize();
 
-       while(true){
-    	   //Scanner scanner = new Scanner(System.in);
-            
 
-            //gather user input
-            int id = gatherID(scanner);
-            if(id == -1){
-                continue;
-            }
-            //gather and hash password
-            //String hash = hashPass(scanner, id);
-
-            //if hash is correct, log user in
-           //TODO - must add file to keep track of users.
-           //TODO - "user" must be built from this todo file.
-            boolean validated = true; // authUser(id, hash);
-            if(validated){
-                //prox.login(user);
-            }
         }
         /**
          * TODO - Rory - Initiate login sequence
@@ -61,7 +44,7 @@ public class Terminal {
          *
          * TODO - Rory - teach that robot how to play the piano if you have time.
          */
-    }
+
 
     //by Mason
     public static int gatherID(Scanner scanner){
@@ -74,13 +57,14 @@ public class Terminal {
         }
     }
 
-    public static void initialize(){
+    public static Database initialize(){
         try {
-            Database DB = Database.getInstance("data/database.csv");
+            return Database.getInstance("data/database.csv");
         }catch(FileNotFoundException e){
             System.out.println("Abort, abort\nThrow the computer away\n3\n2\n1\nEverything is Broken!");
         }
     	//Arraylist of Users
+        return null;
     }
     
     //by Alex
