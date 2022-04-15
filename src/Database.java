@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Database {
+public class Database extends Service{
 	private static Database instance;
 	private static String[][] database = new String[10][8]; //max 10 users currently
 	private static String filePath = "";
@@ -45,7 +45,7 @@ public class Database {
 			
 	}
 	
-	public static Database getInstance(String file) throws FileNotFoundException {
+	protected static Database getInstance(String file) throws FileNotFoundException {
         if (instance == null) {
             instance = new Database(file);
         }
@@ -221,7 +221,11 @@ public class Database {
 		
 
 	}
-	
+
+	@Override
+	void login(User user) {
+
+	}
 }
 
 

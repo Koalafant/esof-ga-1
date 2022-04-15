@@ -2,24 +2,13 @@ import java.io.FileNotFoundException;
 
 public class POSProxy extends Service{
 
-    //by Mason
-    boolean hasPermission(User user, String perm){
-        if(user.hasPerm(perm)){
 
-		}
-	}
 
-    @Override
-    void login(User user) {
-        if(hasPermission(user, "login") || hasPermission(user, "all")){
-            PointOfService.getInstance().login(user);
-        }
-    }
     
     //by Alex below
     
 	//Logs user in, given id #, password, and Database
-	public String logIn(int id, String hashedPass, Database DB) {
+	public String login(int id, String hashedPass, Database DB) {
 		String name = DB.getName(id);
 		switch (DB.login(id, hashedPass)) {
 			case 1:
@@ -82,4 +71,8 @@ public class POSProxy extends Service{
 		}
 	}
 
+	@Override
+	void login(User user) {
+
+	}
 }
