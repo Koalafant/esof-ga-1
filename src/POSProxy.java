@@ -1,78 +1,75 @@
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 public class POSProxy extends Service{
 
+	Database db;
+	static PrintWriter logger;
 
+	public POSProxy(Database db) throws FileNotFoundException {
+		this.db = db;
+		logger = new PrintWriter("/data/log.txt");
+	}
 
-    
     //by Alex below
     
 	//Logs user in, given id #, password, and Database
-	public String login(int id, String hashedPass, Database DB) {
-		String name = DB.getName(id);
-		switch (DB.login(id, hashedPass)) {
+	public void login(int id, String hashedPass) {
+		switch(db.login(id, hashedPass)){
 			case 1:
-				return "Welcome, " + name + "! Successfully logged in.";
-			case 0:
-				return name + ", you are already logged in!";
+				logger.write("Logged in " + id + "\n");
+				break;
 			case -1:
-				return "Invalid Id # / Password";
-			case -2:
-				return "Someone is already logged in";
+				logger.write("Error. Something went wrong\n");
 			default:
-				return "An error occurred.";
+				logger.write("User " + id + " already logged in\n");
+				break;
 		}
 	}
 	
 	
 	//Logs user out, given id #, password, and Database
-	public String logOut(int id, String hashedPass, Database DB) {
-		String name = DB.getName(id);
-		String time = DB.getTime(id);
-		switch (DB.logout(id, hashedPass)) {
+	public void logout(int id, String hashedPass) {
+		switch(db.logout(id, hashedPass)){
 			case 1:
-				return name + ", you have successfully logged out. \nYou were logged in for " + time;
-			case 0:
-				return name + ", you are already logged out!";
+				logger.write("Logged out " + id + "\n");
+				break;
 			case -1:
-				return "Invalid Id # / Password";
-			case -2:
-				return "No one is currently logged in";
+				logger.write("Error. Something went wrong\n");
 			default:
-				return "An error occurred.";
+				logger.write("User " + id + " already logged out\n");
+				break;
 		}
 	}
 	
 	//Deletes a user from the database given user id and Database
-	public String deleteUser(int id, Database DB) throws FileNotFoundException {
-		switch (DB.deleteUser(id)) {
+	public void deleteUser(int id) throws FileNotFoundException {
+		switch (db.deleteUser(id)) {
 			case 1:
-				return "User successfully deleted.";
+				logger.write("User " + id + " successfully deleted.");
 			case 0:
-				return "No such user to delete.";
+				logger.write("No such user to delete.");
 			case -1:
-				return "You do not have permission to delete a user";
+				logger.write("You do not have permission to delete a user");
 			default:
-				return "An error occurred.";
+				logger.write("An error occurred.");
 		}
 	}
 	
 	//Deletes a user from the database given user id and Database
-	public String addUser(String[] info, Database DB) throws FileNotFoundException {
-		switch (DB.addUser(info)) {
+	public void addUser(String[] info) throws FileNotFoundException {
+		switch (db.addUser(info)) {
 			case 1:
-				return "User successfully added.";
+				logger.write("User " + info[0] + " successfully added.");
 			case 0:
-				return "There is no more room in the budget - fire someone and then try again.";
+				logger.write("There is no more room in the budget - fire someone and then try again.");
 			case -1:
-				return "You do not have permission to add a user";
+				logger.write("You do not have permission to add a user");
 			default:
-				return "An error occurred.";
+				logger.write("An error occurred.");
 		}
 	}
 
-	@Override
-	void login(User user) {
 
-	}
 }

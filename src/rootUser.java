@@ -1,16 +1,6 @@
 public class rootUser extends User {
-
-    //by Mason
-    protected rootUser(){
-        id = 0;
-        name = "toor";
-        setPass("root");
-        this.loggedIn = false;
-        this.permissions.add("all");
+    public rootUser(int id, String name, String hash) {
+        super(id, name, hash);
     }
 
-    @Override
-    void addPermissions(User user, String perm) {
-        user.getPerm().add(perm);
-    }
 }

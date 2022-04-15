@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Database extends Service{
@@ -51,6 +52,15 @@ public class Database extends Service{
         }
         return instance;
     }
+
+	protected static Database getInstance(){
+		if(instance != null){
+			return instance;
+		}
+		else{
+			return null;
+		}
+	}
 
 	public static Boolean findUser(String name) {
 		return false;
@@ -214,7 +224,6 @@ public class Database extends Service{
 		instance.update();
 		return 0;
 	}
-
 	
 	//Create and return arraylist of users from Database
 	public void getUsers() {
@@ -222,10 +231,7 @@ public class Database extends Service{
 
 	}
 
-	@Override
-	void login(User user) {
 
-	}
 }
 
 
