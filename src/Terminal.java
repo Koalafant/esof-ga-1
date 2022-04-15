@@ -9,9 +9,7 @@ import java.security.NoSuchAlgorithmException;
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 
-        //initalize GUI
-        TerminalWindow tw = new TerminalWindow();
-        tw.LoginWindow();
+        
 
         //Initialize proxy
         POSProxy prox = new POSProxy();
@@ -19,6 +17,9 @@ public class Terminal {
         //Initialize database
         Database db = initialize();
 
+        //initalize GUI
+        TerminalWindow tw = new TerminalWindow();
+        tw.LoginWindow();
 
         }
         /**
