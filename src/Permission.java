@@ -5,7 +5,7 @@ public class Permission {
     //Initialize fields
     String permissionName;
     String description;
-    HashMap<Permissions, Boolean> userPerms = new HashMap<Permissions, Boolean>();
+    static HashMap<Permissions, Boolean> userPerms = new HashMap<Permissions, Boolean>();
 
     //Create enum of set in stone permissions
     public enum Permissions{
@@ -39,7 +39,7 @@ public class Permission {
     }
 
     //Add an enumed permission and the corresponding boolean to the hashmap
-    protected void addPermissionToMap(Permissions enumPerm, Boolean value){userPerms.put(enumPerm, value);}
+    protected static void addPermissionToMap(Permissions enumPerm, Boolean value){userPerms.put(enumPerm, value);}
 
     //Remove permission from the hashmap
     protected void removePermissionsFromMap(Permissions enumPerm){
@@ -52,7 +52,7 @@ public class Permission {
     }
 
     //Check HashMap for a specific permission
-    public boolean hasPermission(Permissions perm){
+    public static boolean hasPermission(Permissions perm){
 
         //Check if the required permission is in the Map key.  If it is, check the value and return true/false accordingly
         if (userPerms.containsKey(perm)){
