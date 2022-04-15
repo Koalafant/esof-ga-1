@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -10,9 +9,8 @@ import java.security.NoSuchAlgorithmException;
 public class Terminal {
     public static void main(String[] args) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 
-        title();
-        //TerminalWindow tw = new TerminalWindow();
-        //tw.LoginWindow();
+        TerminalWindow tw = new TerminalWindow();
+        tw.LoginWindow();
         
         POSProxy prox = new POSProxy();
 
@@ -67,53 +65,6 @@ public class Terminal {
     }
 
     //by Mason
-    public static void title() {
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::..:....:\n" +
-                ":::::::::::.:::::::..:.....::::::::::::::::::::::::::::~JJ???~:\n" +
-                "::::::::::.::.:..:......::.::::::.:.::.::::.::::::::::.?PPGGP5^\n" +
-                ":::::..::...:..............:.::::.......:.:...::::::::.:JPGGPP!\n" +
-                ":::::::::::::....:.........:.:.:......::..::.:..:.:::::.:YPGP57\n" +
-                ":::::::::::.:::::::::...::::::.:::::::::::::::::::::::::.?PGP5!\n" +
-                ":::::::::.::::::::::::::::::::::::::::::::::::::::::::::.?GGPY:\n" +
-                "::::::::::..:::::::::::::::::::::::::::::::::::::::::::.^YGGPY:\n" +
-                ":::::::::::::::::::::::::::::::::::::::::::::::::      :7Y5P5?::\n" +
-                ".::::::::::::::::.::::::::::::::::::::::::::^^^~~~~     ~~~!?~::::::\n" +
-                ".:::::::::::::::::::::::::...:::::::::::::^~~~~~~~~      ~~~~~~~~~^^::\n" +
-                ":::::::::::.::::::::.::::::.::::::::::::^\t\t                   ~~:\n" +
-                ":::::::::::::::::::::::::::::::::::::.:^~^\t\t\t                   ::\n" +
-                ":::::::::::::::::::::::::::::::::::::^\t\t\t\t                  !^\n" +
-                "::::::::::::::::::::::::::::::::::::^\t\t\t\t                  !~\n" +
-                ":::::::::::::::::::::::::::::::.::^\t\t\t\t                     ~!!^\n" +
-                "::::::::::::::::::::::::::::::::^~\t\t\t\t                      ~!~:\n" +
-                "::::::::::::::::::::::::::::::^~\t\t\t\t                     ~~!!^\n" +
-                "::::::::::::::::::::::::::::^~\t\t\t\t\t                      ~~!!^\n" +
-                ":::::::::::::..:::::::::.:^^\t\t\t\t\t                     ~~~~!~^\n" +
-                ":::::::::::::::::::::::::^\t  _ _\t    _ _ _      _     _ _ _\t          !~^\n" +
-                ".::::::::::::::::::::::\t^\t ||_ _\\    |\t      /\t\\   | _ _ |\n" +
-                "...:::::::::::::::::.:^~~!\t ||_ _ |   |_ _ _    /|\t|\\  | _ _||               ~\n" +
-                "..::::.::..::.::.::..:~~!\t ||_ _/    |_ _ _   |---- | |   \\                !^\n" +
-                "....................:^~!\t ||\t       |\t    |\t  | |    \\\t            !!~\n" +
-                "....................:^\t\t ||\t       |_ _ _   |\t  | |     \\              ~~\n" +
-                "....................:~\t\t         _ _\t   _\t _ _ _\t                 ~~\n" +
-                "....................^~!\t\t        ||_ _\\\t  / \\\t|  _  \\\t\t             !~\n" +
-                "....................^!!!\t        ||_ _ |\t /| |\\\t| | |  |\t             !~\n" +
-                "....................:~!\t            ||_ _/  | ----| | | |  |  \t            !!~\n" +
-                "::::::::::::::::::..:~!\t\t        ||\t    |     |\t| |_|  |\t            !!^\n" +
-                "::::::::::::::::::::.^~!7\t        ||\t    |     |\t|_ _ _/\t\t           7!~:\n" +
-                "::::::::::::::::::::::^!\t\t\t\t\t\t                            !\n" +
-                ":::::::::::::::::::::::^!!\t\t\t\t\t\t                            :\n" +
-                ":::::::::::::::::::::::::~\t\t\t\t\t\t                          ~:\n" +
-                "::::::::::::::::::::::::::^!\t\t\t\t\t\t                     ~^^\n" +
-                ":::::::::::::::::::::^^^^^~~!\t\t\t\t\t\t                    ~~~~^^^\n" +
-                "::::::::::::::::::::^^^~~~!! ~~\t\t\t\t\t\t                          ^\n" +
-                ":::::::::::::::::^^^^^~~~~!!!777?JY55555YYY55555555YY5555555P5555YYJJJJ??77!!\n" +
-                "::::::::::::::::::^^^^^~~~!!!77??JJY5PGGGGGGGGGGGGGGBBBBGGGPP55YYYJJJJ??77!!\n" +
-                ":::::::::::::::::::::^^^^^~~~!!!777???JJYY555PPPPGGGPPPP555YYYJJJ????77!!\n" +
-                ":::::::::::::::::::::::::::^^^^^^~~~~~!!!!!77777??????????77777!!!\n" +
-                ".::::::::::::::::::::::::::::::::::::^^^^^^^^^~~~~~~~~~\n");
-    }
-
-    //by Mason
     public static int gatherID(Scanner scanner){
         System.out.print("User ID: ");
         try {
@@ -124,6 +75,15 @@ public class Terminal {
         }
     }
 
+    public static void initialize(){
+        try {
+            Database DB = Database.getInstance("data/database.csv");
+        }catch(FileNotFoundException e){
+            System.out.println("Abort, abort\nThrow the computer away\n3\n2\n1\nEverything is Broken!");
+        }
+    	//Arraylist of Users
+    }
+    
     //by Alex
     public static String hashPass(String pass) throws NoSuchAlgorithmException, UnsupportedEncodingException{
     	MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -140,7 +100,7 @@ public class Terminal {
     //Messy. Demonstrates basic database functionality. Not much error checking.
     public static void DBtesting(Scanner scanner) throws FileNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {    	
     	
-		Database DB = Database.getInstance("../database.csv");
+		Database DB = Database.getInstance("data/database.csv");
 		DB.print();
 		System.out.println();
         
@@ -148,15 +108,17 @@ public class Terminal {
         System.out.print("Enter user id to log in: ");
         int userID = scanner.nextInt();
         scanner.nextLine(); //dump \n
-        if(DB.findUser(userID)) {
+        if(DB.userExists(userID)) {
         	System.out.print("\nEnter password: ");
         	String pass = hashPass(scanner.nextLine());
         	if(DB.login(userID, pass) == 1) {
         		System.out.println("\nWelcome, " + DB.getName(userID) + "! Successfully logged in.");
         	} else if(DB.login(userID, pass) == 0){
         		System.out.println(DB.getName(userID) + ", you are already logged in!");
+        	} else if(DB.login(userID, pass) == -1){
+        		System.out.println("Incorrect username/password.");
         	} else {
-        		System.out.println("Incorrect password.");
+        		System.out.println("Someone is already logged in!");
         	}
         } else {
         	System.out.println("Invalid user ID.");
@@ -165,54 +127,58 @@ public class Terminal {
         DB.print();
         
         //Logout
-        System.out.print("Enter user id to log out: ");
+//        System.out.print("Enter user id to log out: ");
+//        userID = scanner.nextInt();
+//        scanner.nextLine(); //dump \n
+//        if(DB.userExists(userID)) {
+//        	System.out.print("\nEnter password: ");
+//        	String pass = hashPass(scanner.nextLine());
+//        	if(DB.logout(userID, pass) == 1) {
+//        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
+//        	} else if(DB.logout(userID, pass) == 0){
+//        		System.out.println(DB.getName(userID) + ", you are already logged out!");
+//        	} else if(DB.logout(userID, pass) == -1){
+//        		System.out.println("Incorrect password.");
+//        	} else {
+//        		System.out.println("No one is logged in!");
+//        	}
+//        } else {
+//        	System.out.println("Invalid user ID.");
+//        }
+//        
+//        System.out.println();
+//        DB.print();
+
+        
+        //Delete user
+        System.out.print("Enter user id to delete: "); //11
         userID = scanner.nextInt();
         scanner.nextLine(); //dump \n
-        if(DB.findUser(userID)) {
-        	System.out.print("\nEnter password: ");
-        	String pass = hashPass(scanner.nextLine());
-        	if(DB.logout(userID, pass) == 1) {
-        		System.out.println(DB.getName(userID) + ", you have successfully logged out. You were logged in for " + DB.getTime(userID) + " seconds.");
-        	} else if(DB.logout(userID, pass) == 0){
-        		System.out.println(DB.getName(userID) + ", you are already logged out!");
-        	} else {
-        		System.out.println("Incorrect password.");
-        	}
+        if(DB.deleteUser(userID) == 1) {
+        	System.out.println("User successfully deleted.");
+        } else if(DB.deleteUser(userID) == 0) {
+        	System.out.println("No such user to delete.");
         } else {
-        	System.out.println("Invalid user ID.");
+        	System.out.println("No perms");
         }
         
         System.out.println();
         DB.print();
         
         
-//        //Delete user
-//        System.out.print("Enter user id to delete: "); //11
-//        userID = scanner.nextInt();
-//        scanner.nextLine(); //dump \n
-//        if(DB.deleteUser(userID)) {
-//        	System.out.println("User successfully deleted.");
-//        } else {
-//        	System.out.println("No such user to delete.");
-//        }
-//        
-//        System.out.println();
-//        DB.print();
-//        
-//        
-//        //Add user
-//        System.out.println("\nAdding a user...");
-//        String[] newUserInfo = {"11","Sam",hashPass("aPASS"),"cash","false"};
-//        if(DB.addUser(newUserInfo) == 1) {
-//        	System.out.println("New user successfully added.");
-//        } else if(DB.addUser(newUserInfo) == -1) {
-//        	System.out.println("No space to add user. Please fire someone then try again.");
-//        } else {
-//        	System.out.println("A user with that id number already exists!");
-//        }
-//        
-//        System.out.println();
-//        DB.print();
+        //Add user
+        System.out.println("\nAdding a user...");
+        String[] newUserInfo = {"Sam",hashPass("aPASS"),"cash manage"};
+        if(DB.addUser(newUserInfo) == 1) {
+        	System.out.println("User successfully added.");
+        } else if(DB.deleteUser(userID) == 0) {
+        	System.out.println("No space.");
+        } else {
+        	System.out.println("No perms");
+        }
+        
+        System.out.println();
+        DB.print();
         
         System.out.println("-------- DATABASE TEST END --------\n");
     }

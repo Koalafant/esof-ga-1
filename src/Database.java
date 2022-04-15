@@ -1,9 +1,9 @@
-//I'll fix this more later
 //By Alex
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -11,6 +11,7 @@ public class Database {
 	private static Database instance;
 	private static String[][] database = new String[10][8]; //max 10 users currently
 	private static String filePath = "";
+	private static int highestID = 0;
 	
 	private Database(String file) throws FileNotFoundException {
 		filePath = file;
@@ -34,6 +35,13 @@ public class Database {
 				database[index][i] = lineData[i];
 			}
 		}
+		
+		//initialize highestID
+		for(int i = 0; i < 10; i++) {
+			if(Integer.parseInt(database[i][1]) > highestID) {
+				highestID = Integer.parseInt(database[i][1]);
+			}
+		}		
 			
 	}
 	
@@ -43,28 +51,18 @@ public class Database {
         }
         return instance;
     }
-	
+
+	public static Boolean findUser(String name) {
+		return false;
+	}
+
 	public void print() {
 		System.out.println(Arrays.deepToString(database).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 
 	}
-		
-	//Update database file to current state of database object
-	private void update() throws FileNotFoundException {
-		PrintStream fout = new PrintStream(new FileOutputStream(filePath));
-		fout.print("id,num,name,pass,perms,loggedin\n");
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 8; j++) {
-				fout.print(database[i][j] + ",");
-			}
-			fout.print("\n");
-		}
-		fout.close();
-	}
-	
 	
 	//Check if a user exists by user id
-	public boolean findUser(int id) {
+	public static boolean userExists(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) == id) {
 				return true;
@@ -84,7 +82,7 @@ public class Database {
 		return null;
 	}
 	
-	
+	//Get time clocked in for (seconds)
 	public String getTime(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) {
@@ -96,7 +94,27 @@ public class Database {
 	}
 	
 	
-	//used for deleting, check perms somewhere else.
+	//Checks that the logged in user has change perms
+	private boolean hasChangePerms() {
+		for(int i = 0; i < 10; i++) {
+			if(database[i][5].equals("true") && database[i][4].contains("manage")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//Returns whether someone is currently logged in
+	private static boolean loggedIn() {
+		for(int i = 0; i < 10; i++) {
+			if(database[i][5].equals("true")) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
+	//Used for deleting users
 	private int getRowNum(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) {
@@ -107,10 +125,24 @@ public class Database {
 		return -1;
 	}
 	
+	//Update database file to current state of database object
+	//Called automatically after adding / deleting a user
+	private void update() throws FileNotFoundException {
+		PrintStream fout = new PrintStream(new FileOutputStream(filePath));
+		fout.print("id,num,name,pass,perms,loggedin\n");
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 8; j++) {
+				fout.print(database[i][j] + ",");
+			}
+			fout.print("\n");
+		}
+		fout.close();
+	}
 	
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
-	public int login(int id, String hashedPass) {
+	public static int login(int id, String hashedPass) {
+		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			if(hashedPass.equals(database[i][3])) {
@@ -129,6 +161,7 @@ public class Database {
 	//Logs user out, given id # and password
 	//-1 = bad pass, 0 = logged out already, 1 = log out
 	public int logout(int id, String hashedPass) {
+		if(!loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			if(hashedPass.equals(database[i][3])) {
@@ -146,44 +179,51 @@ public class Database {
 	}
 	
 	//Deletes a user from the database given their user id
-	//true - deleted, false - no one to delete
-	public boolean deleteUser(int id) throws FileNotFoundException {
+	//1 - succeeded, 0 - no such user, -1 no perms
+	public int deleteUser(int id) throws FileNotFoundException {
+		if(!hasChangePerms()) { return -1; }
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 8; i++) {
 				database[row][i] = "-1";
 			}
 			instance.update();
-			return true;
+			return 1;
 		}
 		instance.update();
-		return false;
+		return 0;
 	}
 	
-	//Adds a user to the database given all of their info in an array
+	//Adds a user to the database given their info in an array
 	//of strings - should be a user object?
-	// -1 = no space, 0 = already exists, 1 = added
+	//1 - succeeded, 0 - no space, -1 no perms
 	public int addUser(String[] info) throws FileNotFoundException {
-		int row = getRowNum(Integer.parseInt(info[0]));
-		if(row == -1) { //user doesn't already exist
-			for(int i = 0; i < 10; i++) { //find an empty row to insert into
-				if(database[i][1] != "-1") {continue;}
-				
-				database[i][0] = i + ""; //set row num
-				
-				for(int j = 0; j < 7; j++) { //fill rest of info
-					database[i][j+1] = info[j]; 
-				}
-				instance.update();
-				return 1;
-			}
+		if(!hasChangePerms()) { return -1; }
+		for(int i = 0; i < 10; i++) { //find an empty row to insert into
+			if(database[i][1] != "-1") {continue;}
+			
+			String[] newUser = {i + "", ++highestID + "", info[0], info[1], info[2], "false", "0", "0"};
+			
+			for(int j = 0; j < 8; j++) { //add new user to database
+				database[i][j] = newUser[j]; 
+			}				
+			
 			instance.update();
-			return -1;
+			return 1;
 		}
 		instance.update();
 		return 0;
 	}
 
+	
+	//Create and return arraylist of users from Database
+	public ArrayList<User> getUsers() {
+		
+		
+		
+		return null;
+	}
+	
 }
 
 
