@@ -9,13 +9,13 @@ public class POSProxy extends Service{
 
 	public POSProxy(Database db) throws FileNotFoundException {
 		this.db = db;
-		logger = new PrintWriter("/data/log.txt");
+		logger = new PrintWriter("../data/log.txt");
 	}
 
     //by Alex below
     
 	//Logs user in, given id #, password, and Database
-	public void login(int id, String hashedPass) {
+	public void login(int id, String hashedPass) throws FileNotFoundException {
 		switch(db.login(id, hashedPass)){
 			case 1:
 				logger.write("Logged in " + id + "\n");
@@ -30,7 +30,7 @@ public class POSProxy extends Service{
 	
 	
 	//Logs user out, given id #, password, and Database
-	public void logout(int id, String hashedPass) {
+	public void logout(int id, String hashedPass) throws FileNotFoundException {
 		switch(db.logout(id, hashedPass)){
 			case 1:
 				logger.write("Logged out " + id + "\n");
