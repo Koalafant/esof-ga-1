@@ -26,34 +26,41 @@ public class POSProxy extends Service {
 
 	//by Alex and Mason
 	//Logs user in, given id #, password, and Database
-	public void login(int id, String hashedPass) throws FileNotFoundException {
+	public static int login(int id, String hashedPass) throws FileNotFoundException {
+            
 		switch (Database.login(id, hashedPass)) {
 			case 1:
 				logger.write("Logged in " + id + "\n");
-				break;
+                                logger.flush();
+                                return 1;
 			case -1:
 				logger.write("Error. Something went wrong\n");
-			default:
+                                logger.flush();
+                                return -1;
+                        default:
 				logger.write("User " + id + " already logged in\n");
-				break;
+                                logger.flush();
+                                return 0;
 		}
-		logger.flush();
 	}
 
 
 	//Logs user out, given id #, password, and Database
-	public void logout(int id, String hashedPass) throws FileNotFoundException {
+	public static int logout(int id, String hashedPass) throws FileNotFoundException {
 		switch (Database.logout(id, hashedPass)) {
 			case 1:
 				logger.write("Logged out " + id + "\n");
-				break;
+                                logger.flush();
+				return 1;
 			case -1:
 				logger.write("Error. Something went wrong\n");
-			default:
+                                logger.flush();
+                                return -1;
+                        default:
 				logger.write("User " + id + " already logged out\n");
-				break;
+                                logger.flush();
+				return 0;
 		}
-		logger.flush();
 	}
 
 	//Deletes a user from the database given user id and Database

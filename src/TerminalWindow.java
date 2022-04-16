@@ -1,6 +1,8 @@
-
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.*;
 
 // Written by Rory
@@ -42,7 +44,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
         setIconImage(image);
 
         JLabel otherLogo = new JLabel(logo);
-        otherLogo.setBounds(277, 20, 120, 120);
+        otherLogo.setBounds(350, 20, 120, 120);
         panel.add(otherLogo);
 
         usernameLabel = new JLabel("Username");
@@ -74,6 +76,10 @@ public class TerminalWindow extends JFrame implements ActionListener{
     // Main menu once logged in, can proceed to permissions menu or logout
     public void UserMenu(){               
         
+        ImageIcon logo = new ImageIcon("images/logo.png");
+        Image image = logo.getImage();
+        setIconImage(image);
+        
         changePermissions = new JButton("Permissions");
         changePermissions.setBounds(120, 160, 110, 25);
         changePermissions.setForeground(Color.WHITE);
@@ -94,6 +100,10 @@ public class TerminalWindow extends JFrame implements ActionListener{
     // Menu to change any permissions
     public void permissionsMenu(){
         
+        ImageIcon logo = new ImageIcon("images/logo.png");
+        Image image = logo.getImage();
+        setIconImage(image);
+        
         // Creates all 7 checkboxes, set them as true if user already has the permission
         
         // Add item permission
@@ -103,7 +113,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
             panel.add(addItem);
         }
         else{
-            addItem = new JCheckBox("Add Item", true);
+            addItem = new JCheckBox("Add Item");
             addItem.setBounds(60, 20, 150, 25);
             panel.add(addItem);
         }
@@ -196,6 +206,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
         
         setVisible(true);
     }
+    @Override
     public void actionPerformed(ActionEvent ae){
         
         // Triggers login sequence
@@ -211,11 +222,21 @@ public class TerminalWindow extends JFrame implements ActionListener{
 
             if (validUser == true){                    
                     try {
-                        Database.login(Integer.parseInt(username.getText()), Terminal.hashPass(password.getSelectedText()));
-                        dispose();
-                        TerminalWindow tw = new TerminalWindow();
-                        tw.UserMenu();                      
-                    } catch (Exception e) {
+                        POSProxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                        int loginStatus = POSProxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                        switch (loginStatus){
+                            case 1:
+                                dispose();
+                                TerminalWindow tw = new TerminalWindow();
+                                tw.UserMenu();
+                                break;
+                            case -1:
+                                JOptionPane.showMessageDialog(this, "Incorrect Username or Password", "WARNING", JOptionPane.WARNING_MESSAGE);
+                            case 0:
+                                JOptionPane.showMessageDialog(this, "User already logged in", "WARNING", JOptionPane.WARNING_MESSAGE);
+                        }
+                                              
+                    } catch (FileNotFoundException | UnsupportedEncodingException | NumberFormatException | NoSuchAlgorithmException e) {
                         e.getStackTrace();
                     }                      
             }
@@ -226,11 +247,20 @@ public class TerminalWindow extends JFrame implements ActionListener{
         // Logout sequence
         else if(ae.getActionCommand().equals("Logout")){
             try{
-                Database.logout(Integer.parseInt(username.getText()), Terminal.hashPass(password.getSelectedText()));
-                dispose();
-                TerminalWindow tw = new TerminalWindow();
-                tw.LoginWindow();
-            } catch (Exception e){
+                //POSProxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                int logoutStatus = POSProxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                switch(logoutStatus){
+                    case 1:
+                        dispose();
+                        TerminalWindow tw = new TerminalWindow();
+                        tw.LoginWindow();
+                    case -1:
+                        JOptionPane.showMessageDialog(this, "Error Unknown", "WARNING", JOptionPane.WARNING_MESSAGE);
+                    case 0:
+                        JOptionPane.showMessageDialog(this, "User already logged out", "WARNING", JOptionPane.WARNING_MESSAGE);
+                }
+                
+            } catch (FileNotFoundException | UnsupportedEncodingException | NumberFormatException | NoSuchAlgorithmException e){
                 e.getStackTrace();
             }
         }   

@@ -68,4 +68,3 @@ public class Terminal {
     	return hashedPass;
     }
 }
-
