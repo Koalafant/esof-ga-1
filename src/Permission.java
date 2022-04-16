@@ -25,6 +25,7 @@ public class Permission {
         this.userPerms = userPerms;
     }
 
+    //Initialize a default map of false permissions
     public static HashMap<Permissions, Boolean> initialize(){
         HashMap<Permissions, Boolean> ret = new HashMap<>();
         ret.put(Permissions.ADD_ITEM, false);
@@ -57,7 +58,6 @@ public class Permission {
         //Check if the required permission is in the Map key.  If it is, check the value and return true/false accordingly
         if (userPerms.containsKey(perm)){
             if(userPerms.get(perm)){return true;}
-
             else{return false;}
         }
         else{return false;}
@@ -68,25 +68,4 @@ public class Permission {
 
     //Get the description of the permission
     public String getPermissionDesc(){return description;}
-
-    // TESTING CODE REMOVE WHEN DONE
-    public static void main(String[] args){
-        //Initialize a HashMap permission list
-        HashMap<Permissions, Boolean> permListManager = new HashMap<>();
-        //Initialize a permission
-        Permission ManagerPermissions = new Permission(permListManager, "Manager", "Manager permissions");
-        //Test get and addPermissions
-        ManagerPermissions.getPermissions();
-        ManagerPermissions.addPermissionToMap(Permissions.ADD_ITEM, true);
-        ManagerPermissions.getPermissions();
-        //Test hasPermission
-        System.out.println(ManagerPermissions.hasPermission(Permissions.REMOVE_USER));
-        System.out.println(ManagerPermissions.hasPermission(Permissions.ADD_ITEM));
-        //Test removePermission
-        ManagerPermissions.removePermissionsFromMap(Permissions.ADD_ITEM);
-        ManagerPermissions.getPermissions();
-        ManagerPermissions.addPermissionToMap(Permissions.ADD_USER, false);
-        //Testing second layer of checks in hasPermission
-        System.out.println(ManagerPermissions.hasPermission(Permissions.ADD_USER));
-    }
 }

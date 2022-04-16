@@ -19,14 +19,12 @@ public class Terminal {
         initialize();
         POSProxy prox = new POSProxy();
 
-        //initalize GUI
+        //Initialize GUI
         TerminalWindow tw = new TerminalWindow();
         tw.LoginWindow();
-
         }
 
     //by Mason
-
     /**
      * UNUSED
      * @param scanner
@@ -43,7 +41,7 @@ public class Terminal {
     }
 
     /**
-     * Intializes database with its .csv file
+     * Initializes database with its .csv file
      * @return UNUSED
      */
     public static Database initialize() throws FileNotFoundException {
@@ -69,6 +67,5 @@ public class Terminal {
     	String hashedPass = bigInt.toString(16);
     	return hashedPass;
     }
-
 }
 

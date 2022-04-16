@@ -221,8 +221,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
             }
             else{
                 JOptionPane.showMessageDialog(this, "Username not found", "WARNING", JOptionPane.WARNING_MESSAGE);
-            }   
-
+            }
         }
         // Logout sequence
         else if(ae.getActionCommand().equals("Logout")){
