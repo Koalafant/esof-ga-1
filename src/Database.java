@@ -40,8 +40,7 @@ public class Database extends Service{
 			if(Integer.parseInt(database[i][1]) > highestID) {
 				highestID = Integer.parseInt(database[i][1]);
 			}
-		}		
-			
+		}
 	}
 	
 	protected static Database getInstance(String file) throws FileNotFoundException {
@@ -66,7 +65,6 @@ public class Database extends Service{
 
 	private void print() {
 		System.out.println(Arrays.deepToString(database).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-
 	}
 	
 	//Check if a user exists by user id
@@ -241,8 +239,6 @@ public class Database extends Service{
 		}
 		return false;
 	}
-	
-
 }
 
 

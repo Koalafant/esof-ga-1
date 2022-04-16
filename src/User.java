@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-
 
 //By Mason
 public class User {
@@ -17,6 +15,5 @@ public class User {
         password = hash;
         perms = Permission.initialize();
         loggedIn = false;
-        }
-
     }
+}

@@ -25,7 +25,6 @@ public class POSProxy extends Service {
 	}
 
 	//by Alex and Mason
-
 	//Logs user in, given id #, password, and Database
 	public void login(int id, String hashedPass) throws FileNotFoundException {
 		switch (Database.login(id, hashedPass)) {
@@ -55,7 +54,6 @@ public class POSProxy extends Service {
 				break;
 		}
 		logger.flush();
-
 	}
 
 	//Deletes a user from the database given user id and Database
