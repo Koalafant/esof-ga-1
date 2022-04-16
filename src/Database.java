@@ -70,7 +70,7 @@ public class Database extends Service{
 	}
 	
 	//Check if a user exists by user id
-	private static boolean userExists(int id) {
+	public static boolean userExists(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) == id) {
 				return true;
@@ -98,7 +98,7 @@ public class Database extends Service{
 	}
 	
 	//Get permissions for a given user
-	private String getPerms(int id) {
+	protected String getPerms(int id) {
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			return database[i][4];
@@ -144,7 +144,7 @@ public class Database extends Service{
 	
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
-	private static int login(int id, String hashedPass) throws FileNotFoundException {
+	protected static int login(int id, String hashedPass) throws FileNotFoundException {
 		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
@@ -164,7 +164,7 @@ public class Database extends Service{
 	
 	//Logs user out, given id # and password
 	//-2 = no one is logged in, -1 = bad pass, 0 = logged out already, 1 = log out
-	private static int logout(int id, String hashedPass) throws FileNotFoundException {
+	protected static int logout(int id, String hashedPass) throws FileNotFoundException {
 		if(!loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
@@ -185,7 +185,7 @@ public class Database extends Service{
 	
 	//Deletes a user from the database given their user id
 	//returns true on success
-	private boolean deleteUser(int id) throws FileNotFoundException {
+	protected boolean deleteUser(int id) throws FileNotFoundException {
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 8; i++) {
@@ -199,7 +199,7 @@ public class Database extends Service{
 	
 	//Adds a user to the database given their info in an array
 	//of strings. Returns true on success
-	private boolean addUser(String[] info) throws FileNotFoundException {
+	protected boolean addUser(String[] info) throws FileNotFoundException {
 		for(int i = 0; i < 10; i++) { //find an empty row to insert into
 			if(database[i][1] != "-1") {continue;}
 			
@@ -217,7 +217,7 @@ public class Database extends Service{
 
 	
 	//Adds a permission to a given user. Returns true on success
-	private boolean addPerm(int id, int perm) throws FileNotFoundException {
+	protected boolean addPerm(int id, int perm) throws FileNotFoundException {
 		for(int i = 0; i < 10; i++) { 
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			
@@ -230,7 +230,7 @@ public class Database extends Service{
 	}
 	
 	//Removes a permission from a given user. Returns true on success
-	private boolean removePerm(int id, int perm) throws FileNotFoundException {
+	protected boolean removePerm(int id, int perm) throws FileNotFoundException {
 		for(int i = 0; i < 10; i++) { 
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			

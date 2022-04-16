@@ -19,10 +19,4 @@ public class User {
         loggedIn = false;
         }
 
-    public boolean hasPerm(User user, Permission.Permissions perm){
-        if(user.perms.get(perm)){
-            return true;
-        }
-        return false;
-    }
     }
