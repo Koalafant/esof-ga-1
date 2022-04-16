@@ -84,9 +84,7 @@ public class Database extends Service{
 	//Name from id #
 	public String getName(int id) {
 		for(int i = 0; i < 10; i++) {
-			if(Integer.parseInt(database[i][1]) != id) {
-				continue;
-			}
+			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			return database[i][2];
 		}
 		return null;
@@ -95,24 +93,31 @@ public class Database extends Service{
 	//Get time clocked in for (seconds)
 	public String getTime(int id) {
 		for(int i = 0; i < 10; i++) {
-			if(Integer.parseInt(database[i][1]) != id) {
-				continue;
-			}
+			if(Integer.parseInt(database[i][1]) != id) { continue; }
 			return database[i][7];
+		}
+		return null;
+	}
+	
+	//Get permissions for a given user
+	public String getPerms(int id) {
+		for(int i = 0; i < 10; i++) {
+			if(Integer.parseInt(database[i][1]) != id) { continue; }
+			return database[i][4];
 		}
 		return null;
 	}
 	
 	
 	//Checks that the logged in user has change perms
-	private boolean hasChangePerms() {
-		for(int i = 0; i < 10; i++) {
-			if(database[i][5].equals("true") && database[i][4].contains("manage")) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean hasChangePerms() {
+//		for(int i = 0; i < 10; i++) {
+//			if(database[i][5].equals("true") && database[i][4].contains("manage")) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	//Returns whether someone is currently logged in
 	private static boolean loggedIn() {
@@ -151,7 +156,7 @@ public class Database extends Service{
 	
 	//Logs user in, given id # and password
 	//-1 = bad pass, 0 = logged in already, 1 = log in
-	public static int login(int id, String hashedPass) {
+	public static int login(int id, String hashedPass) throws FileNotFoundException {
 		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
@@ -159,6 +164,7 @@ public class Database extends Service{
 				if(database[i][5].equals("false")) {
 					database[i][5] = "true";
 					database[i][6] = java.time.Instant.now().getEpochSecond() + "";
+					instance.update();
 					return 1;
 				} else { //already logged in
 					return 0;
@@ -170,7 +176,7 @@ public class Database extends Service{
 	
 	//Logs user out, given id # and password
 	//-1 = bad pass, 0 = logged out already, 1 = log out
-	public static int logout(int id, String hashedPass) {
+	public static int logout(int id, String hashedPass) throws FileNotFoundException {
 		if(!loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
 			if(Integer.parseInt(database[i][1]) != id) { continue; }
@@ -179,6 +185,7 @@ public class Database extends Service{
 					database[i][5] = "false";
 					database[i][7] = (java.time.Instant.now().getEpochSecond() - Long.parseLong(database[i][6])) + "";
 					database[i][6] = "0";
+					instance.update();
 					return 1;
 				} else { //already logged out
 					return 0;
@@ -191,7 +198,7 @@ public class Database extends Service{
 	//Deletes a user from the database given their user id
 	//1 - succeeded, 0 - no such user, -1 no perms
 	public int deleteUser(int id) throws FileNotFoundException {
-		if(!hasChangePerms()) { return -1; }
+		// if(!hasChangePerms()) { return -1; }
 		int row = getRowNum(id);
 		if(row != -1) { //user exists
 			for(int i = 1; i < 8; i++) {
@@ -200,7 +207,6 @@ public class Database extends Service{
 			instance.update();
 			return 1;
 		}
-		instance.update();
 		return 0;
 	}
 	
@@ -208,7 +214,7 @@ public class Database extends Service{
 	//of strings - should be a user object?
 	//1 - succeeded, 0 - no space, -1 no perms
 	public int addUser(String[] info) throws FileNotFoundException {
-		if(!hasChangePerms()) { return -1; }
+		// if(!hasChangePerms()) { return -1; }
 		for(int i = 0; i < 10; i++) { //find an empty row to insert into
 			if(database[i][1] != "-1") {continue;}
 			
@@ -221,16 +227,36 @@ public class Database extends Service{
 			instance.update();
 			return 1;
 		}
-		instance.update();
 		return 0;
 	}
+
 	
-	//Create and return arraylist of users from Database
-	public void getUsers() {
-		
-
+	//Adds a permission to a given user
+	public boolean addPerm(int id, int perm) throws FileNotFoundException {
+		for(int i = 0; i < 10; i++) { 
+			if(Integer.parseInt(database[i][1]) != id) { continue; }
+			
+			database[i][4] += perm+"";
+			
+			instance.update();
+			return true;
+		}
+		return false;
 	}
-
+	
+	//Removes a permission from a given user
+	public boolean removePerm(int id, int perm) throws FileNotFoundException {
+		for(int i = 0; i < 10; i++) { 
+			if(Integer.parseInt(database[i][1]) != id) { continue; }
+			
+			database[i][4] = database[i][4].replace(perm+"", "");
+			
+			instance.update();
+			return true;
+		}
+		return false;
+	}
+	
 
 }
 
