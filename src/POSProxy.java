@@ -15,7 +15,7 @@ public class POSProxy extends Service {
 
 	//checks for given permission given int
 	public static boolean checkPerm(int id, String perm) {
-		String[] perms = Database.getInstance().getPerms(id).split(" ");
+		String[] perms = Database.getInstance().getPerms(id).split("");
 		for (String p : perms) {
 			if (p.equals(perm)) {
 				return true;
@@ -58,7 +58,7 @@ public class POSProxy extends Service {
 
 	//Deletes a user from the database given user id and Database
 	public void deleteUser(int id) throws FileNotFoundException {
-		if (checkPerm(id, "4")) {
+		if (checkPerm(Database.getInstance().currentUserID, "4")) {
 			boolean success = Database.getInstance().deleteUser(id);
 			if (success) {
 				logger.write("User " + id + " successfully deleted.");
@@ -73,16 +73,43 @@ public class POSProxy extends Service {
 
 	//Deletes a user from the database given user id and Database
 	public void addUser(int id, String[] info) throws FileNotFoundException {
-		if (checkPerm(id, "3")) {
+		if (checkPerm(Database.getInstance().currentUserID, "3")) {
 			boolean success = Database.getInstance().addUser(info);
 			if (success) {
-				logger.write("User " + info[0] + " successfully added.");
+				logger.write("User " + info[0] + " successfully added.\n");
 			} else {
-				logger.write("An error occurred.");
+				logger.write("An error occurred.\n");
 			}
 		} else {
 			logger.write("Invalid permissions\n");
 		}
 		logger.flush();
 	}
+
+	public void addPerm(int id, int perm) throws FileNotFoundException {
+		if(checkPerm(Database.getInstance().currentUserID, "5")){
+			if(Database.getInstance().addPerm(id, perm)){
+				logger.write("Permission " + Permission.Permissions.values()[perm] + " added to user " + id + "\n");
+			}else{
+				logger.write("An error occured.\n");
+			}
+		}else{
+			logger.write("Invalid permissions\n");
+		}
+		logger.flush();
+	}
+
+	public void removePerm(int id, int perm) throws FileNotFoundException {
+		if(checkPerm(Database.getInstance().currentUserID, "5")){
+			if(Database.getInstance().removePerm(id, perm)){
+				logger.write("Permission " + Permission.Permissions.values()[perm] + " deleted from User " + id + "\n");
+			}else{
+				logger.write("An error occured.\n");
+			}
+		}else{
+			logger.write("Invalid permissions\n");
+		}
+		logger.flush();
+	}
+
 }
