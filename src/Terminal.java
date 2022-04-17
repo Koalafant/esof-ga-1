@@ -20,7 +20,7 @@ public class Terminal {
         POSProxy prox = new POSProxy();
 
         //Initialize GUI
-        TerminalWindow tw = new TerminalWindow();
+        TerminalWindow tw = new TerminalWindow(prox);
         tw.LoginWindow();
         }
 

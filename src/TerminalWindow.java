@@ -9,6 +9,7 @@ import javax.swing.*;
 public class TerminalWindow extends JFrame implements ActionListener{
     
     private static TerminalWindow inst;
+    private static POSProxy proxy;
 
     private static JLabel passwordLabel, usernameLabel, permissionsUpdated;
     private static JTextField username;    
@@ -17,14 +18,14 @@ public class TerminalWindow extends JFrame implements ActionListener{
     private static JPanel panel;
     private static JCheckBox addItem, removeItem, modItem, addUser, removeUser, modUser, viewReceipt;
     
-    public static TerminalWindow getInstance()
-    {
+    public static TerminalWindow getInstance() throws FileNotFoundException {
         if (inst == null)
-            inst = new TerminalWindow();
+            inst = new TerminalWindow(new POSProxy());
         return inst;
     }
 
-    TerminalWindow(){
+    TerminalWindow(POSProxy px){
+        proxy = px;
         panel = new JPanel();
         setResizable(false);
         panel.setLayout(null);
@@ -222,12 +223,12 @@ public class TerminalWindow extends JFrame implements ActionListener{
 
             if (validUser == true){                    
                     try {
-                        POSProxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
-                        int loginStatus = POSProxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                        proxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                        int loginStatus = proxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
                         switch (loginStatus){
                             case 1:
                                 dispose();
-                                TerminalWindow tw = new TerminalWindow();
+                                TerminalWindow tw = new TerminalWindow(proxy);
                                 tw.UserMenu();
                                 break;
                             case -1:
@@ -248,11 +249,11 @@ public class TerminalWindow extends JFrame implements ActionListener{
         else if(ae.getActionCommand().equals("Logout")){
             try{
                 //POSProxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
-                int logoutStatus = POSProxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                int logoutStatus = proxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
                 switch(logoutStatus){
                     case 1:
                         dispose();
-                        TerminalWindow tw = new TerminalWindow();
+                        TerminalWindow tw = new TerminalWindow(proxy);
                         tw.LoginWindow();
                     case -1:
                         JOptionPane.showMessageDialog(this, "Error Unknown", "WARNING", JOptionPane.WARNING_MESSAGE);
@@ -267,13 +268,13 @@ public class TerminalWindow extends JFrame implements ActionListener{
         // Displays permissions menu
         else if(ae.getActionCommand().equals("Permissions")){
             dispose();
-            TerminalWindow tw = new TerminalWindow();
+            TerminalWindow tw = new TerminalWindow(proxy);
             tw.permissionsMenu();
         }  
         // Returns to main menu from permissions menu  
         else if(ae.getActionCommand().equals("Back")){
             dispose();
-            TerminalWindow tw = new TerminalWindow();
+            TerminalWindow tw = new TerminalWindow(proxy);
             tw.UserMenu();
         }
         
