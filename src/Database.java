@@ -243,6 +243,3 @@ public class Database extends Service{
 		return false;
 	}
 }
-
-
-

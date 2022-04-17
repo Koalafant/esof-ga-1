@@ -22,7 +22,7 @@ public class Terminal {
         //Initialize GUI
         TerminalWindow tw = new TerminalWindow(prox);
         tw.LoginWindow();
-        }
+    }
 
     //by Mason
     /**
@@ -68,3 +68,5 @@ public class Terminal {
     	return hashedPass;
     }
 }
+
+
