@@ -34,6 +34,9 @@ public class Database extends Service{
 			for(int i = 1; i < 8; i++) {
 				database[index][i] = lineData[i];
 			}
+			
+			//Make sure everyone is marked as logged off
+			database[index][5] = "false";
 		}
 		
 		//initialize highestID
