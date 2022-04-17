@@ -11,6 +11,7 @@ public class Database extends Service{
 	private static String[][] database = new String[10][8]; //max 10 users currently
 	private static String filePath = "";
 	private static int highestID = 0;
+	protected static int currentUserID = -1;
 	
 	private Database(String file) throws FileNotFoundException {
 		filePath = file;
@@ -141,7 +142,7 @@ public class Database extends Service{
 	}
 	
 	//Logs user in, given id # and password
-	//-1 = bad pass, 0 = logged in already, 1 = log in
+	//-2 someone is logged in, -1 = bad pass, 0 = logged in already, 1 = log in
 	protected static int login(int id, String hashedPass) throws FileNotFoundException {
 		if(loggedIn()) { return -2; }
 		for(int i = 0; i < 10; i++) {
@@ -151,6 +152,7 @@ public class Database extends Service{
 					database[i][5] = "true";
 					database[i][6] = java.time.Instant.now().getEpochSecond() + "";
 					instance.update();
+					currentUserID = Integer.parseInt(database[i][1]);
 					return 1;
 				} else { //already logged in
 					return 0;
@@ -172,6 +174,7 @@ public class Database extends Service{
 					database[i][7] = (java.time.Instant.now().getEpochSecond() - Long.parseLong(database[i][6])) + "";
 					database[i][6] = "0";
 					instance.update();
+					currentUserID = -1;
 					return 1;
 				} else { //already logged out
 					return 0;
