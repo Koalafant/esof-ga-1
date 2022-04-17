@@ -3,6 +3,8 @@ import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 // Written by Rory
@@ -222,8 +224,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
             else{validUser = false;} 
 
             if (validUser == true){                    
-                    try {
-                        proxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+                    try {                        
                         int loginStatus = proxy.login(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
                         switch (loginStatus){
                             case 1:
@@ -233,8 +234,10 @@ public class TerminalWindow extends JFrame implements ActionListener{
                                 break;
                             case -1:
                                 JOptionPane.showMessageDialog(this, "Incorrect Username or Password", "WARNING", JOptionPane.WARNING_MESSAGE);
+                                break;
                             case 0:
                                 JOptionPane.showMessageDialog(this, "User already logged in", "WARNING", JOptionPane.WARNING_MESSAGE);
+                                break;
                         }
                                               
                     } catch (FileNotFoundException | UnsupportedEncodingException | NumberFormatException | NoSuchAlgorithmException e) {
@@ -247,18 +250,20 @@ public class TerminalWindow extends JFrame implements ActionListener{
         }
         // Logout sequence
         else if(ae.getActionCommand().equals("Logout")){
-            try{
-                //POSProxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
+            try{                
                 int logoutStatus = proxy.logout(Integer.parseInt(username.getText()), Terminal.hashPass(String.valueOf(password.getPassword())));
                 switch(logoutStatus){
                     case 1:
                         dispose();
                         TerminalWindow tw = new TerminalWindow(proxy);
                         tw.LoginWindow();
+                        break;
                     case -1:
                         JOptionPane.showMessageDialog(this, "Error Unknown", "WARNING", JOptionPane.WARNING_MESSAGE);
+                        break;
                     case 0:
                         JOptionPane.showMessageDialog(this, "User already logged out", "WARNING", JOptionPane.WARNING_MESSAGE);
+                        break;
                 }
                 
             } catch (FileNotFoundException | UnsupportedEncodingException | NumberFormatException | NoSuchAlgorithmException e){
@@ -281,33 +286,61 @@ public class TerminalWindow extends JFrame implements ActionListener{
         else if(ae.getActionCommand().equals("Submit")){
             
             // Changes Add Item permission
-            if(addItem.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.ADD_ITEM, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.ADD_ITEM, false);}
-
+            try {
+                if(addItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Changes Remove Item permission
-            if(removeItem.isSelected() == true){Permission.addPermissionToMap((Permission.Permissions.REMOVE_ITEM), true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.REMOVE_ITEM, false);}
-
+            try {
+                if(removeItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Changes Modify Item permission
-            if(modItem.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.MODIFY_ITEM, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.MODIFY_ITEM, false);}
-
-            // Changes Add User permission
-            if(addUser.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.ADD_USER, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.ADD_USER, false);}
-
+            try {
+                if(modItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // Changes Add User permission           
+            try {
+                if(addUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_USER.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_USER.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Changes Remove User permission
-            if(removeUser.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.REMOVE_USER, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.REMOVE_USER, false);}
-
+            try {
+                if(removeUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Changes Modify User permission
-            if(modUser.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.MODIFY_USER, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.MODIFY_USER, false);}
-
+            try {
+                if(modUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Changes View Receipt permission
-            if(viewReceipt.isSelected() == true){Permission.addPermissionToMap(Permission.Permissions.VIEW_RECEIPT, true);}
-            else{Permission.addPermissionToMap(Permission.Permissions.VIEW_RECEIPT, false);}
-
+            try {
+                if(viewReceipt.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
+                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             permissionsUpdated = new JLabel("Permissions Updated");
             permissionsUpdated.setBounds(200, 200, 150, 25);
             panel.add(permissionsUpdated);
