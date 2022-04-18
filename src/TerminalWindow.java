@@ -8,8 +8,25 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 // Written by Rory
+/**
+ * <h1>Restaurant Interface GUI</h1>
+ * Terminal window creates the on screen interface to login/logout and change permissions.
+ * 
+ * 
+ * @author Rory Donley-Lovato
+ * @since 4/17/2022
+ */
 public class TerminalWindow extends JFrame implements ActionListener{
     
+    /**
+     * All of the variables used by the GUI
+     * inst and proxy are class references
+     * passwordLabel, usernameLabel, and permissionID are title text
+     * username and userID are input fields
+     * password is a secure password input field
+     * The 5 buttons are triggers for events in actionListener
+     * The checkboxes are for the permissions screen when adding permissions to a user
+     */
     private static TerminalWindow inst;
     private static POSProxy proxy;
 
@@ -20,12 +37,22 @@ public class TerminalWindow extends JFrame implements ActionListener{
     private static JPanel panel;
     private static JCheckBox addItem, removeItem, modItem, addUser, removeUser, modUser, viewReceipt;
     
+    /**
+     * This method creates an instance of the TerminalWindow constructor
+     * @return the created instance
+     * @throws FileNotFoundException
+     */
     public static TerminalWindow getInstance() throws FileNotFoundException {
         if (inst == null)
             inst = new TerminalWindow(new POSProxy());
         return inst;
     }
 
+    /**
+     * This is the base of the Terminal Window
+     * It contains the base measurements for the GUI window
+     * @param px
+     */
     TerminalWindow(POSProxy px){
         proxy = px;
         panel = new JPanel();
@@ -40,7 +67,11 @@ public class TerminalWindow extends JFrame implements ActionListener{
         add(panel);
     }
 
-    // Login Window, take username and password and checks against record before allowing access
+    /**
+     * This method creates the login window
+     * User inputs their username and password and proceeds to the main menu if both are correct
+     * Login button triggers events in actionListener to create error messages or create menu screen
+     */
     public void LoginWindow(){
         ImageIcon logo = new ImageIcon("images/logo.png");
         Image image = logo.getImage();
@@ -76,7 +107,12 @@ public class TerminalWindow extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    // Main menu once logged in, can proceed to permissions menu or logout
+    /**
+     * This method creates the main menu with 2 buttons 
+     * for logout or open permissions screen
+     * Permissions button will open the permissions screen
+     * Logout will logout the user and return to the login screen
+     */
     public void UserMenu(){               
         
         ImageIcon logo = new ImageIcon("images/logo.png");
@@ -100,7 +136,12 @@ public class TerminalWindow extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    // Menu to change any permissions
+    /**
+     * This method opens the permissions screen
+     * Creates 7 checkboxes and a text field 
+     * The checkboxes correspond to the seven permissions available
+     * The userID input field will get the target ID that the permissions are being applied to
+     */
     public void permissionsMenu(){
         
         ImageIcon logo = new ImageIcon("images/logo.png");
@@ -115,7 +156,7 @@ public class TerminalWindow extends JFrame implements ActionListener{
         userID.setBounds(330, 110, 100, 25);
         panel.add(userID);
         
-        // Creates all 7 checkboxes, set them as true if user already has the permission
+        // Creates all 7 checkboxes
         
         // Add item permission
         if(Permission.hasPermission(Permission.Permissions.ADD_ITEM) == true){
@@ -217,6 +258,28 @@ public class TerminalWindow extends JFrame implements ActionListener{
         
         setVisible(true);
     }
+
+    /**
+     * This method contains all of the events that trigger upon different button being pressed
+     * 
+     * Login checks if the username inputed is valid
+     * If the username is in the database, it'll begin the login sequence with the password
+     * and create the main menu if the password validates for that username
+     * Displays error messages for username not being in the database, password being incorrect, and user already logged in
+     * 
+     * Logout triggers the logout sequence in database and recreates the login screen
+     * 
+     * Permissions creates the permissions menu from the main menu
+     * 
+     * Back recreates the main menu from the permissions menu
+     * 
+     * Submit triggers a permissions changing sequence
+     * It goes through each checkbox and if the checkbox is true,
+     * it will add the permission in the checkbox to the user listed in the user ID field
+     * Upon completion it will display a permissions updated message
+     * It will also display an error message if there is no user ID listed
+     * or the ID inputted is not in the database
+     */
     @Override
     public void actionPerformed(ActionEvent ae){
         
@@ -277,13 +340,15 @@ public class TerminalWindow extends JFrame implements ActionListener{
             } catch (FileNotFoundException | UnsupportedEncodingException | NumberFormatException | NoSuchAlgorithmException e){
                 e.getStackTrace();
             }
-        }   
+        }
+
         // Displays permissions menu
         else if(ae.getActionCommand().equals("Permissions")){
             dispose();
             TerminalWindow tw = new TerminalWindow(proxy);
             tw.permissionsMenu();
         }  
+
         // Returns to main menu from permissions menu  
         else if(ae.getActionCommand().equals("Back")){
             dispose();
