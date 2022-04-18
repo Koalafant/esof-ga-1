@@ -1,5 +1,5 @@
-As a manager, I want this system to allow as much as my employees need,
-without giving them too much access, so that I can focus on my tasks instead of micromanaging.
+As a manager, I want a way to give permission to my employees
+to use the system, so I don't have to micromanage.
 
 As a staff member, I want to clock in quickly with my employee id,
  so I can get to work without having to remember too many passwords.
