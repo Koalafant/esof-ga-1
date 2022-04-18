@@ -1,10 +1,19 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+/**
+ * By Mason and Alex
+ * Proxy class that acts as middleman to protected/private database.
+ * Ensures users have permission to call what methods they're trying to call.
+ */
 public class POSProxy extends Service {
 
 	static PrintWriter logger;
 
+	/**
+	 * Constructor creates a logging writer to log GUI backend in terminal
+	 * @throws FileNotFoundException - file used by database to track user data
+	 */
 	public POSProxy() throws FileNotFoundException {
 		try {
 			logger = new PrintWriter("data/log.txt");
@@ -13,7 +22,12 @@ public class POSProxy extends Service {
 		}
 	}
 
-	//checks for given permission given int
+	/**
+	 * Checks wether given id user has given perm given string i.e. "3"
+	 * @param id user id. Unique to user
+	 * @param perm String permission. String of an int. I.e. "357".
+	 * @return true or false.
+	 */
 	public static boolean checkPerm(int id, String perm) {
 		String[] perms = Database.getInstance().getPerms(id).split("");
 		for (String p : perms) {
@@ -24,8 +38,13 @@ public class POSProxy extends Service {
 		return false;
 	}
 
-	//by Alex and Mason
-	//Logs user in, given id #, password, and Database
+	/**
+	 * Logs a user in to the database.
+	 * @param id user id.
+	 * @param hashedPass hashed password so password is not echoed.
+	 * @return return code for terminal window. See TerminalWindow.Java
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public int login(int id, String hashedPass) throws FileNotFoundException {
 		switch (Database.login(id, hashedPass)) {
 			case 1:
@@ -45,7 +64,13 @@ public class POSProxy extends Service {
 	}
 
 
-	//Logs user out, given id #, password, and Database
+	/**
+	 * Logs current user out of system.
+	 * @param id user id.
+	 * @param hashedPass hashed password so password is not echoed.
+	 * @return return code. See TerminalWindow.Java
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public int logout(int id, String hashedPass) throws FileNotFoundException {
 		switch (Database.logout(id, hashedPass)) {
 			case 1:
@@ -63,7 +88,11 @@ public class POSProxy extends Service {
 		}
 	}
 
-	//Deletes a user from the database given user id and Database
+	/**
+	 * Deletes a user from the database.
+	 * @param id user id to be deleted.
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public void deleteUser(int id) throws FileNotFoundException {
 		if (checkPerm(Database.getInstance().currentUserID, "4")) {
 			boolean success = Database.getInstance().deleteUser(id);
@@ -78,7 +107,12 @@ public class POSProxy extends Service {
 		logger.flush();
 	}
 
-	//Deletes a user from the database given user id and Database
+	/**
+	 * adds a user to the database.
+	 * @param id user id.
+	 * @param info other stuff like permissions and type of user.
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public void addUser(int id, String[] info) throws FileNotFoundException {
 		if (checkPerm(Database.getInstance().currentUserID, "3")) {
 			boolean success = Database.getInstance().addUser(info);
@@ -93,6 +127,12 @@ public class POSProxy extends Service {
 		logger.flush();
 	}
 
+	/**
+	 * adds a permission to the given user.
+	 * @param id user id to be granted permission.
+	 * @param perm permission to be granted.
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public void addPerm(int id, int perm) throws FileNotFoundException {
 		if(checkPerm(Database.getInstance().currentUserID, "5")){
 			if(Database.getInstance().addPerm(id, perm)){
@@ -106,6 +146,12 @@ public class POSProxy extends Service {
 		logger.flush();
 	}
 
+	/**
+	 * removes a permission from the given user.
+	 * @param id user id to be used.
+	 * @param perm permission to be removed.
+	 * @throws FileNotFoundException - file used by database.
+	 */
 	public void removePerm(int id, int perm) throws FileNotFoundException {
 		if(checkPerm(Database.getInstance().currentUserID, "5")){
 			if(Database.getInstance().removePerm(id, perm)){
