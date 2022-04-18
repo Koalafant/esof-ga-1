@@ -1,4 +1,3 @@
-//By Alex
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -6,6 +5,9 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * @author Alex DuBois
+ */
 public class Database extends Service{
 	private static Database instance; // Represents database
 	private static String[][] database = new String[10][8]; //max 10 users

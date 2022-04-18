@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
-// By Cole
 /**
+ * @author Cole Orelup
  * Permission class for creating user permissions
  */
 public class Permission {

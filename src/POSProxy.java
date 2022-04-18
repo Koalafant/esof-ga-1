@@ -2,7 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 /**
- * By Mason and Alex
+ * @author Mason Reyher
  * Proxy class that acts as middleman to protected/private database.
  * Ensures users have permission to call what methods they're trying to call.
  */
