@@ -13,8 +13,8 @@ public class TerminalWindow extends JFrame implements ActionListener{
     private static TerminalWindow inst;
     private static POSProxy proxy;
 
-    private static JLabel passwordLabel, usernameLabel, permissionsUpdated;
-    private static JTextField username;    
+    private static JLabel passwordLabel, usernameLabel, permissionID;
+    private static JTextField username, userID;    
     private static JPasswordField password;
     private static JButton loginButton, logoutButton, changePermissions, exitPermissions, submitPermissions;
     private static JPanel panel;
@@ -106,6 +106,14 @@ public class TerminalWindow extends JFrame implements ActionListener{
         ImageIcon logo = new ImageIcon("images/logo.png");
         Image image = logo.getImage();
         setIconImage(image);
+        
+        permissionID = new JLabel("User ID");
+        permissionID.setBounds(280, 110, 50, 25);
+        panel.add(permissionID);
+        
+        userID = new JTextField();
+        userID.setBounds(330, 110, 100, 25);
+        panel.add(userID);
         
         // Creates all 7 checkboxes, set them as true if user already has the permission
         
@@ -285,65 +293,77 @@ public class TerminalWindow extends JFrame implements ActionListener{
         
         else if(ae.getActionCommand().equals("Submit")){
             
-            // Changes Add Item permission
-            try {
-                if(addItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Boolean validUserID;
+            Boolean validInt = userID.getText().matches("-?\\d+");
+
+            if(validInt == true){
+                validUserID = Database.userExists(Integer.parseInt(username.getText()));
             }
+            else{validUserID = false;} 
             
-            // Changes Remove Item permission
-            try {
-                if(removeItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+            if(validUserID == true){
+                // Changes Add Item permission
+                try {
+                    if(addItem.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.ADD_ITEM.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes Remove Item permission
+                try {
+                    if(removeItem.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.REMOVE_ITEM.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes Modify Item permission
+                try {
+                    if(modItem.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes Add User permission           
+                try {
+                    if(addUser.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.ADD_USER.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.ADD_USER.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes Remove User permission
+                try {
+                    if(removeUser.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes Modify User permission
+                try {
+                    if(modUser.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Changes View Receipt permission
+                try {
+                    if(viewReceipt.isSelected() == true){proxy.addPerm(Integer.parseInt(userID.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
+                    else{proxy.removePerm(Integer.parseInt(userID.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+
+                
+                JOptionPane.showMessageDialog(this, "Permissions Updated", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+                
+            } else{
+                JOptionPane.showMessageDialog(this, "Enter a valid User ID", "WARNING", JOptionPane.WARNING_MESSAGE);
             }
-            
-            // Changes Modify Item permission
-            try {
-                if(modItem.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_ITEM.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // Changes Add User permission           
-            try {
-                if(addUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_USER.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.ADD_USER.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // Changes Remove User permission
-            try {
-                if(removeUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.REMOVE_USER.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // Changes Modify User permission
-            try {
-                if(modUser.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.MODIFY_USER.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // Changes View Receipt permission
-            try {
-                if(viewReceipt.isSelected() == true){proxy.addPerm(Integer.parseInt(username.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
-                else{proxy.removePerm(Integer.parseInt(username.getText()), Permission.Permissions.VIEW_RECEIPT.ordinal());}
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TerminalWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            permissionsUpdated = new JLabel("Permissions Updated");
-            permissionsUpdated.setBounds(200, 200, 150, 25);
-            panel.add(permissionsUpdated);
         }
     }
 }
