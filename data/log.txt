@@ -1,2 +1,10 @@
+Error. Something went wrong
 Logged in 92
+Invalid permissions
+Invalid permissions
+Invalid permissions
+Invalid permissions
+Invalid permissions
+Invalid permissions
+Invalid permissions
 Logged out 92
