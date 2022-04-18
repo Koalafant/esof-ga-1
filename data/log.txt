@@ -1,4 +1,3 @@
-Error. Something went wrong
 Logged in 92
 Invalid permissions
 Invalid permissions
