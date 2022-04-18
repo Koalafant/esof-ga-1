@@ -1,1 +1,9 @@
 Logged in 92
+Permission ADD_ITEM added to user 27
+Permission REMOVE_ITEM added to user 27
+Permission MODIFY_ITEM deleted from User 27
+Permission ADD_USER deleted from User 27
+Permission REMOVE_USER deleted from User 27
+Permission MODIFY_USER deleted from User 27
+Permission VIEW_RECEIPT deleted from User 27
+Logged out 92
